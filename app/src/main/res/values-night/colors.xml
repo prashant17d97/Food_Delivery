@@ -6,6 +6,10 @@
     <color name="card_text">#9AAAAE</color>
     <color name="primary_color">#FB7500</color>
     <color name="price_color">#4BB000</color>
+    <color name="bnm_non_selected_icon_color">@color/white</color>
     <color name="app_icon_fg">#353E40</color>
     <color name="app_icon_bg">#EEF2F5</color>
+    <color name="_353E40">#353E40</color>
+    <color name="_FB7500">#FB7500</color>
+    <color name="ic_launcher_background">#FE6500</color>
 </resources>

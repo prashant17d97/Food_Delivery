@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <style name="Splash" parent="Theme.SplashScreen">
         <item name="windowSplashScreenBackground">#EEF2F5</item>
-        <item name="windowSplashScreenAnimatedIcon">@drawable/main_logo</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/main_logo_light</item>
         <item name="postSplashScreenTheme">@style/Theme.FoodDelivery</item>
-        <item name="windowSplashScreenAnimationDuration">20000</item>
     </style>
 </resources>
