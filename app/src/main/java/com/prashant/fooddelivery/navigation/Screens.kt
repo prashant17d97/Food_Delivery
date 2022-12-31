@@ -8,8 +8,19 @@ const val demo = "demo"
 
 
 /**
- * Screen Ids*/
+ *
+ * Screen Ids
+ * */
+
+
+/**
+ * OnBoardings*/
 const val login = "Login"
+const val registration = "Registration"
+const val forgotPassword = "ForgotPassword"
+const val otp = "OTP"
+
+
 const val home = "Home"
 const val tracking = "Tracking"
 const val checkout = "Checkout"
@@ -27,6 +38,9 @@ sealed class Screens(var title: String, var icon: Int = 0, var route: String) {
     object Checkout : Screens(checkout, R.drawable.checkout_icon, route = checkout)
     object Account : Screens(account, R.drawable.user_icon, route = account)
 
-    /** Other screen Controls*/
+    /** OnBoarding screen Controls*/
     object Login : Screens(title = login, route = login)
+    object Registration : Screens(title = registration, route = registration)
+    object ForgotPassword : Screens(title = forgotPassword, route = forgotPassword)
+    object OTP : Screens(title = otp, route = otp)
 }

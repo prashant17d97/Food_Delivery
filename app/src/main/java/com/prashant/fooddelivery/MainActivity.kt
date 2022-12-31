@@ -1,5 +1,6 @@
 package com.prashant.fooddelivery
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -25,13 +26,19 @@ import androidx.navigation.compose.rememberNavController
 import com.prashant.fooddelivery.navigation.Screens
 import com.prashant.fooddelivery.navigation.SetupNavGraph
 import com.prashant.fooddelivery.theme.FoodDeliveryTheme
+import java.lang.ref.WeakReference
 
 class MainActivity : ComponentActivity() {
-    private val isVisibility = MutableLiveData<Boolean>(true)
+    private val isVisibility = MutableLiveData(true)
+
+    companion object {
+        lateinit var context: WeakReference<Context>
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         installSplashScreen()
+        context = WeakReference(this)
         /*.apply {
                 this.setOnExitAnimationListener { viewProvider ->
                     viewProvider.iconView
@@ -60,14 +67,19 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colors.background
                 ) {
                     MainScreen(rememberNavController()) {
-                        Log.e("TAG", "onCreate: $it")
                         isVisibility.value = it
                     }
                 }
             }
         }
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        context.clear()
+    }
 }
+
 
 @Composable
 private fun MainScreen(navHostController: NavHostController, isBNMVisible: (Boolean) -> Unit = {}) {
@@ -104,11 +116,11 @@ private fun BottomNavigationView(navController: NavController) {
     )
     BottomNavigation(
         /**modifier = Modifier
-              .padding(10.dp)
-              .graphicsLayer(
-                  shape = RoundedCornerShape(topStart = 25.dp, topEnd = 25.dp),
-                clip = true,
-            ),*/
+        .padding(10.dp)
+        .graphicsLayer(
+        shape = RoundedCornerShape(topStart = 25.dp, topEnd = 25.dp),
+        clip = true,
+        ),*/
         backgroundColor = colorResource(
             id = R.color.card_bg
         ),
@@ -139,7 +151,6 @@ private fun BottomNavigationView(navController: NavController) {
                 selected = currentRoute == item.route,
                 onClick = {
                     navController.navigate(item.route) {
-
                         navController.graph.startDestinationRoute?.let { route ->
                             popUpTo(route) {
                                 inclusive = true

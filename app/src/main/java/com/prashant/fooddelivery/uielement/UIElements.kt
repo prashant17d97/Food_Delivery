@@ -1,22 +1,23 @@
 package com.prashant.fooddelivery.uielement
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.shape.RoundedCornerShape
+import android.util.Log
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.*
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Phone
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.graphics.BlendMode
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -29,8 +30,13 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.constraintlayout.compose.ConstraintLayout
 import com.prashant.fooddelivery.R
+import com.prashant.fooddelivery.methods.CommonMethod.toast
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -41,7 +47,9 @@ fun CustomPasswordTextField(
     placeholderText: String = stringResource(id = R.string.password),
     placeholderColor: Color = colorResource(id = R.color.white),
     imeAction: ImeAction = ImeAction.Done,
-    keyboardType: KeyboardType = KeyboardType.Password
+    keyboardType: KeyboardType = KeyboardType.Password,
+    onGO: () -> Unit = {},
+    leadingIcon: ImageVector = ImageVector.vectorResource(id = R.drawable.lock_open)
 ) {
 
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -49,7 +57,8 @@ fun CustomPasswordTextField(
     val focusManager = LocalFocusManager.current
     val icon =
         if (isPasswordVisible)
-            painterResource(id = R.drawable.ic_visibile) else painterResource(id = R.drawable.ic_visibility_off)
+            painterResource(id = R.drawable.ic_visibile)
+        else painterResource(id = R.drawable.ic_visibility_off)
 
     TextField(
         singleLine = singleLine,
@@ -58,13 +67,19 @@ fun CustomPasswordTextField(
         ),
         keyboardActions = KeyboardActions(
             onDone = {
+                isPasswordVisible = false
                 keyboardController?.hide()
                 focusManager.clearFocus(true)
             },
             onNext = {
+                isPasswordVisible = false
                 focusManager.moveFocus(
                     focusDirection = FocusDirection.Next
                 )
+            },
+            onGo = {
+                isPasswordVisible = false
+                onGO()
             }),
         value = password,
         colors = TextFieldDefaults.textFieldColors(
@@ -76,14 +91,14 @@ fun CustomPasswordTextField(
 
         modifier = Modifier
             .background(
-                color = colorResource(id = R.color._33979797),
+                color = colorResource(id = R.color._66FFFFFF),
                 shape = MaterialTheme.shapes.medium
             )
             .fillMaxWidth(),
         textStyle = TextStyle(color = Color.White),
         leadingIcon = {
             Icon(
-                imageVector = ImageVector.vectorResource(id = R.drawable.lock_open),
+                imageVector = leadingIcon,
                 contentDescription = "phoneIcon",
                 tint = colorResource(id = R.color.white)
             )
@@ -112,6 +127,10 @@ fun CustomPasswordTextField(
 }
 
 
+/**
+ * [CustomTextField]
+ * */
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun CustomTextField(
     phone: String,
@@ -119,41 +138,95 @@ fun CustomTextField(
     keyboardType: KeyboardType = KeyboardType.Number,
     imeAction: ImeAction = ImeAction.Next,
     charLimit: Int = 10,
-    singleLine: Boolean = true
+    singleLine: Boolean = true,
+    action: () -> Unit = {},
+    leadingIcon: ImageVector = ImageVector.vectorResource(id = R.drawable.phone_icon)
 ) {
     val focusManager = LocalFocusManager.current
+    val keyBoardControl = LocalSoftwareKeyboardController.current
     TextField(
         value = phone,
-
         colors = TextFieldDefaults.textFieldColors(
             focusedIndicatorColor = Color.Transparent,
             unfocusedIndicatorColor = Color.Transparent,
             disabledIndicatorColor = Color.Transparent
         ),
 
-        shape = RoundedCornerShape(7.dp),
+        shape = MaterialTheme.shapes.medium,
         modifier = Modifier
             .background(
-                color = colorResource(id = R.color._33979797),
+                color = colorResource(id = R.color._66FFFFFF),
                 shape = MaterialTheme.shapes.medium
             )
             .fillMaxWidth(),
         textStyle = TextStyle(color = Color.White),
         leadingIcon = {
             Icon(
-                imageVector = Icons.Outlined.Phone,
+                imageVector = leadingIcon,
                 contentDescription = "phoneIcon",
                 tint = colorResource(id = R.color.white)
             )
         },
-
-        onValueChange = {
-            if (it.length == charLimit) {
+        keyboardActions = KeyboardActions(
+            onDone = {
+                action()
+                keyBoardControl?.hide()
+                focusManager.clearFocus(true)
+            },
+            onNext = {
                 focusManager.moveFocus(
                     focusDirection = FocusDirection.Next
                 )
+            },
+            onGo = {
+                action()
+                keyBoardControl?.hide()
+                focusManager.clearFocus(true)
             }
-            onValueChange(it)
+        ),
+        onValueChange = {
+            when {
+                it.length == charLimit -> {
+                    when (imeAction) {
+                        ImeAction.Done -> {
+                            action()
+                            keyBoardControl?.hide()
+                            focusManager.clearFocus(true)
+                        }
+                        ImeAction.Next -> {
+                            focusManager.moveFocus(
+                                focusDirection = FocusDirection.Next
+                            )
+                        }
+                        ImeAction.Go -> {
+                            action()
+                            keyBoardControl?.hide()
+                            focusManager.clearFocus(true)
+                        }
+                    }
+                    onValueChange(it)
+                }
+                it.length <= charLimit -> {
+                    onValueChange(it)
+                }
+                else -> {
+                    toast(message = "You can not add more character")
+                    when (imeAction) {
+                        ImeAction.Done -> {
+                            keyBoardControl?.hide()
+                            focusManager.clearFocus()
+                        }
+                        ImeAction.Next -> {
+                            focusManager.moveFocus(
+                                focusDirection = FocusDirection.Next
+                            )
+                        }
+                    }
+
+                }
+            }
+
+
         },
         placeholder = {
             Text(
@@ -164,7 +237,189 @@ fun CustomTextField(
         },
         singleLine = singleLine,
         keyboardOptions = KeyboardOptions(
-            keyboardType = keyboardType, imeAction = imeAction
+            keyboardType = keyboardType,
+            imeAction = imeAction
         ),
     )
 }
+
+/**
+ * This [ImageBackground] compose will return the full screen with image background with column Scope.
+ * It will require an image in painterResource
+ * */
+@Composable
+fun ImageBackground(
+    painter: Painter,
+    columnStartPadding: Dp = 30.dp,
+    columnEndPadding: Dp = 30.dp,
+    columnTopPadding: Dp = 100.dp,
+    columnBottomPadding: Dp = 0.dp,
+    isBackVisible: Boolean = false,
+    backClick: () -> Unit = {},
+    backPaddingModifier: Dp = 20.dp,
+    columnVerticalArrangement: Arrangement.Vertical = Arrangement.Center,
+    columnHorizontalAlign: Alignment.Horizontal = Alignment.CenterHorizontally,
+    content: @Composable ColumnScope.() -> Unit,
+) {
+    ConstraintLayout(
+        modifier = Modifier
+            .fillMaxSize()
+    ) {
+        val (background, foreground, backNavigator) = createRefs()
+
+        Image(painter = painter,
+            contentDescription = "",
+            modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxHeight()
+                .aspectRatio(painter.intrinsicSize.width / painter.intrinsicSize.height)
+                .drawWithCache {
+                    val gradient = Brush.verticalGradient(
+                        colors = listOf(Color.White, Color.Black),
+                        startY = size.height / 3,
+                        endY = size.height
+                    )
+                    onDrawWithContent {
+                        drawContent()
+                        drawRect(gradient, blendMode = BlendMode.Multiply)
+                    }
+                }
+                .fillMaxSize()
+                .constrainAs(background) {
+                    top.linkTo(parent.top)
+                    bottom.linkTo(parent.bottom)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                })
+        AnimatedVisibility(visible = isBackVisible) {
+            Image(
+                painter = painterResource(id = R.drawable.ic_back),
+                contentDescription = "Navigate To back",
+                modifier = Modifier
+                    .clickable { backClick() }
+                    .padding(backPaddingModifier)
+                    .constrainAs(backNavigator) {
+                        top.linkTo(background.top)
+                        start.linkTo(background.start)
+                    }
+            )
+        }
+
+
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+                .padding(
+                    start = columnStartPadding,
+                    end = columnEndPadding,
+                    top = columnTopPadding,
+                    bottom = columnBottomPadding
+                )
+                .constrainAs(foreground) {
+                    top.linkTo(parent.top)
+                    bottom.linkTo(parent.bottom)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                },
+            verticalArrangement = columnVerticalArrangement,
+            horizontalAlignment = columnHorizontalAlign
+        ) {
+            content()
+        }
+
+
+    }
+
+}
+
+@OptIn(ExperimentalComposeUiApi::class)
+@Composable
+fun DynamicOTP(size: Int,otp:(String,Int)->Unit) {
+    val focusManager = LocalFocusManager.current
+    val keyBoardControl = LocalSoftwareKeyboardController.current
+    Row(
+        horizontalArrangement = Arrangement.SpaceBetween,
+    ) {
+        repeat(size) {
+            var tempOt by rememberSaveable() {
+                mutableStateOf("")
+            }
+            Box(
+                modifier = Modifier
+                    .width(60.dp)
+                    .height(60.dp)
+                    .padding(5.dp)
+            ) {
+                TextField(
+                    value = tempOt,
+                    colors = TextFieldDefaults.textFieldColors(
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent,
+                        disabledIndicatorColor = Color.Transparent
+                    ),
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Number,
+                        imeAction = if (it != size - 1) {
+                            ImeAction.Next
+                        } else {
+                            ImeAction.Done
+                        }
+                    ),
+                    shape = MaterialTheme.shapes.medium,
+                    modifier = Modifier
+                        .background(
+                            color = colorResource(id = R.color._66FFFFFF),
+                            shape = MaterialTheme.shapes.medium
+                        )
+                        .fillMaxSize(),
+                    textStyle = MaterialTheme.typography.body1.copy(
+                        textAlign = TextAlign.Center,
+                        color = Color.White
+                    ),
+
+                    keyboardActions = KeyboardActions(
+                        onDone = {},
+                        onNext = {
+                        },
+                        onGo = {
+                        }
+                    ),
+                    onValueChange = { value ->
+                        if (value.length == 1) {
+                            tempOt = value.last().toString()
+                            otp(tempOt,it)
+                        } else {
+                            tempOt = if (value.isNotEmpty()) value.last().toString() else ""
+                            otp(tempOt,it)
+                        }
+                        if (value.isNotEmpty()) {
+                            if (it != size - 1) {
+                                focusManager.moveFocus(
+                                    focusDirection = FocusDirection.Next
+                                )
+                            } else {
+                                keyBoardControl?.hide()
+                                focusManager.clearFocus()
+                            }
+
+                        } else {
+                            if (it != 0) {
+                                focusManager.moveFocus(
+                                    focusDirection = FocusDirection.Previous
+                                )
+                            }
+                        }
+                    },
+                    singleLine = true,
+                )
+            }
+        }
+    }
+}
+
+
+@Preview
+@Composable
+fun PreviewUiElements() = DynamicOTP(4, otp = {s,t->})
+

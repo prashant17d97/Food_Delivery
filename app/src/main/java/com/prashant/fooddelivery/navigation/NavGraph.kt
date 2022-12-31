@@ -5,17 +5,17 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.prashant.fooddelivery.ui.Account
-import com.prashant.fooddelivery.ui.Checkout
-import com.prashant.fooddelivery.ui.Home
-import com.prashant.fooddelivery.ui.Tracking
+import com.prashant.fooddelivery.ui.*
+import com.prashant.fooddelivery.ui.forgot.ForgotPassword
 import com.prashant.fooddelivery.ui.login.Login
+import com.prashant.fooddelivery.ui.otp.OTP
+import com.prashant.fooddelivery.ui.registration.Registration
 
 
 @Composable
 fun SetupNavGraph(navController: NavHostController) {
     NavHost(
-        navController = navController, startDestination = Screens.Home.route
+        navController = navController, startDestination = Screens.Login.route
     ) {
         composable(route = Screens.Home.route) {
             Home(navController)
@@ -31,6 +31,15 @@ fun SetupNavGraph(navController: NavHostController) {
         }
         composable(route = Screens.Login.route) {
             Login(navController)
+        }
+        composable(route = Screens.Registration.route) {
+            Registration(navController)
+        }
+        composable(route = Screens.ForgotPassword.route) {
+            ForgotPassword(navController)
+        }
+        composable(route = Screens.OTP.route) {
+            OTP(navController)
         }
     }
 }

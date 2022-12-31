@@ -11,6 +11,7 @@ import com.prashant.fooddelivery.R
 
 val OpenSans = FontFamily(
     Font(R.font.open_sans_bold, FontWeight.Bold),
+    Font(R.font.opensan_semibold, FontWeight.SemiBold),
     Font(R.font.open_sans_ragular)
 )
 
@@ -26,6 +27,12 @@ val Typography = Typography(
         fontFamily = OpenSans,
         fontWeight = FontWeight.Normal,
         fontSize = 14.sp,
+        color = Color.White,
+    ),
+    subtitle1 = TextStyle(
+        fontFamily = OpenSans,
+        fontWeight = FontWeight.SemiBold,
+        fontSize = 12.sp,
         color = Color.White,
     ),
     button = TextStyle(
