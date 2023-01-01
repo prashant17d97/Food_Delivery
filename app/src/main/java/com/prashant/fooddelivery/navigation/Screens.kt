@@ -4,7 +4,9 @@ import com.prashant.fooddelivery.R
 
 /**
  * Arguments Ids*/
-const val demo = "demo"
+const val comingFrom = "ComingFrom"
+const val RestPassword = "ForgotPassword"
+const val RegistrationScreen = "Registration"
 
 
 /**
@@ -19,6 +21,7 @@ const val login = "Login"
 const val registration = "Registration"
 const val forgotPassword = "ForgotPassword"
 const val otp = "OTP"
+const val resetPassword = "ResetPassword"
 
 
 const val home = "Home"
@@ -42,5 +45,10 @@ sealed class Screens(var title: String, var icon: Int = 0, var route: String) {
     object Login : Screens(title = login, route = login)
     object Registration : Screens(title = registration, route = registration)
     object ForgotPassword : Screens(title = forgotPassword, route = forgotPassword)
-    object OTP : Screens(title = otp, route = otp)
+    object OTP : Screens(title = otp, route = "$otp/{$comingFrom}"){
+        fun otpArgs(comingFrom: String): String {
+            return "$otp/$comingFrom"
+        }
+    }
+    object ResetPassword :Screens(title = resetPassword, route = resetPassword)
 }

@@ -2,8 +2,10 @@ package com.prashant.fooddelivery.ui.forgot
 
 import android.util.Log
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.Button
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -26,75 +28,70 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.prashant.fooddelivery.R
+import com.prashant.fooddelivery.navigation.RestPassword
 import com.prashant.fooddelivery.navigation.Screens
-import com.prashant.fooddelivery.uielement.CustomTextField
-import com.prashant.fooddelivery.uielement.ImageBackground
+import com.prashant.fooddelivery.uielement.UIElements
 
 @Composable
 fun ForgotPassword(navController: NavController) {
     var phone by rememberSaveable { mutableStateOf("") }
-    ImageBackground(
-        painter = painterResource(id = R.drawable.forgot_password),
-        isBackVisible = true,
-        backClick = {
-            Log.e("TAG", "ImageBackground: backClick()")
-            navController.popBackStack()
-        },
-        columnVerticalArrangement = Arrangement.Top
-    ) {
-        Image(
-            painter = painterResource(id = R.drawable.lock_open),
-            modifier = Modifier.size(120.dp), contentDescription = "Forget"
-        )
-        Spacer(modifier = Modifier.height(10.dp))
-        Text(
-            text = stringResource(id = R.string.forgot_pass),
-            style = MaterialTheme.typography.body1.copy(
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold
-            )
-        )
-        Spacer(modifier = Modifier.height(10.dp))
-        Text(
-            text = stringResource(id = R.string.forgot_pass_msg),
-            style = MaterialTheme.typography.subtitle1.copy(
-                fontSize = 12.sp,
-                fontWeight = FontWeight.Normal
-            ),
-            textAlign = TextAlign.Center
-        )
-        Spacer(modifier = Modifier.height(20.dp))
-        CustomTextField(
-            phone = phone, onValueChange = { phone = it },
-            leadingIcon = ImageVector.vectorResource(
-                id = R.drawable.phone_icon
-            ),
-            keyboardType = KeyboardType.Number,
-            imeAction = ImeAction.Done,
-            charLimit = 10,
-            singleLine = true,
-
-            )
-        Spacer(modifier = Modifier.height(30.dp))
-        Button(
-            onClick = {
-                navController.navigate(Screens.OTP.route) {
-                    this.popUpTo(Screens.ForgotPassword.route) {
-                        this.inclusive = true
-                    }
-                }
+    with(UIElements()) {
+        ImageBackground(
+            painter = painterResource(id = R.drawable.forgot_password),
+            isBackVisible = true,
+            backClick = {
+                Log.e("TAG", "ImageBackground: backClick()")
+                navController.popBackStack()
             },
-            shape = MaterialTheme.shapes.medium,
-            modifier = Modifier
-                .fillMaxWidth(),
-            content = {
-                Text(
-                    text = stringResource(id = R.string.send),
-                    style = MaterialTheme.typography.button
+            columnVerticalArrangement = Arrangement.Top
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.lock_open),
+                modifier = Modifier.size(120.dp), contentDescription = "Forget"
+            )
+            Spacer(modifier = Modifier.height(10.dp))
+            Text(
+                text = stringResource(id = R.string.forgot_pass),
+                style = MaterialTheme.typography.body1.copy(
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold
                 )
-            }
-        )
+            )
+            Spacer(modifier = Modifier.height(10.dp))
+            Text(
+                text = stringResource(id = R.string.forgot_pass_msg),
+                style = MaterialTheme.typography.subtitle1.copy(
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.Normal
+                ),
+                textAlign = TextAlign.Center
+            )
+            Spacer(modifier = Modifier.height(20.dp))
+            CustomTextField(
+                phone = phone, onValueChange = { phone = it },
+                leadingIcon = ImageVector.vectorResource(
+                    id = R.drawable.phone_icon
+                ),
+                keyboardType = KeyboardType.Number,
+                imeAction = ImeAction.Done,
+                charLimit = 10,
+                singleLine = true,
+
+                )
+            Spacer(modifier = Modifier.height(30.dp))
+            GradientButtonNoRipple(
+                textOnButton = stringResource(id = R.string.send),
+                onClick = {
+                    navController.navigate(Screens.OTP.otpArgs(RestPassword)) {
+                        this.popUpTo(Screens.ForgotPassword.route) {
+                            this.inclusive = true
+                        }
+                    }
+                },
+            )
+        }
     }
+
 }
 
 @Preview

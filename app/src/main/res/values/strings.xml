@@ -2,6 +2,7 @@
     <string name="app_name">Food Delivery</string>
     <string name="phone">Phone</string>
     <string name="password">Password</string>
+    <string name="new_password">New Password</string>
     <string name="confirm_password">Confirm password</string>
     <string name="login">Login</string>
     <string name="send">Send</string>
@@ -12,5 +13,7 @@
     <string name="sms_pass">SMS password</string>
     <string name="sms_pass_msg">Insert a four-digit code from SMS.</string>
     <string name="forgot_pass_msg">Write your phone number and we will send a password recovery code.</string>
+    <string name="create_new_pass">Create your new strong password.</string>
     <string name="create_new_account">Create new account</string>
+    <string name="name">Name</string>
 </resources>
