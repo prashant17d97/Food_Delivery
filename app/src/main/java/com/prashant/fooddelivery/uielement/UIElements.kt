@@ -60,7 +60,6 @@ class UIElements {
         onGO: () -> Unit = {},
         leadingIcon: ImageVector = ImageVector.vectorResource(id = R.drawable.lock_open)
     ) {
-
         val keyboardController = LocalSoftwareKeyboardController.current
         var isPasswordVisible by rememberSaveable { mutableStateOf(false) }
         val focusManager = LocalFocusManager.current
@@ -288,9 +287,6 @@ class UIElements {
         backClick: () -> Unit = {},
         content: @Composable ColumnScope.() -> Unit,
     ) {
-        /*val interactionSource = remember {
-            MutableInteractionSource()
-        }*/
         ConstraintLayout(
             modifier = Modifier.fillMaxSize()
         ) {
@@ -887,17 +883,6 @@ class UIElements {
 
     @Preview
     @Composable
-    fun PreviewUiElements() =
-        RestaurantDishCard(
-            RestaurantDishModel(
-                restaurantName = "Philadelphia rolls\nwith salmon",
-                restaurantOffers = "",
-                stars = 4.0f,
-                comments = 285,
-                sales = 1286,
-                icon = R.drawable.salmon,
-                isRestaurant = false
-            )
-        )
+    fun PreviewUiElements() = SearchCard(value = "", onValueChange = {})
 }
 
