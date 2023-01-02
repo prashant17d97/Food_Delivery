@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.prashant.fooddelivery.R
+import com.prashant.fooddelivery.enums.IsVisible
 import com.prashant.fooddelivery.navigation.RestPassword
 import com.prashant.fooddelivery.navigation.Screens
 import com.prashant.fooddelivery.navigation.comingFrom
@@ -27,10 +28,10 @@ import com.prashant.fooddelivery.uielement.UIElements
 
 @Composable
 fun OTP(navController: NavController) {
-    with(UIElements()){
+    with(UIElements()) {
         ImageBackground(
             painter = painterResource(id = R.drawable.otp_food),
-            isBackVisible = true,
+            isBackVisible = IsVisible.VISIBLE,
             backClick = { navController.popBackStack() },
             columnVerticalArrangement = Arrangement.Top
         ) {

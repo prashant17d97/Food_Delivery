@@ -38,7 +38,6 @@ fun Registration(navController: NavController) {
     var phone by rememberSaveable { mutableStateOf("") }
     var password by rememberSaveable { mutableStateOf("") }
     var confirmPassword by rememberSaveable { mutableStateOf("") }
-    val pattern = remember { Regex("^\\d+\$") }
 
     with(UIElements()) {
         ImageBackground(
@@ -87,7 +86,6 @@ fun Registration(navController: NavController) {
                         phone = it
                     }
                 },
-                keyboardType = KeyboardType.Number,
                 imeAction = ImeAction.Next,
                 charLimit = 10,
                 singleLine = true,

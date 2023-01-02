@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.prashant.fooddelivery.R
+import com.prashant.fooddelivery.enums.IsVisible
 import com.prashant.fooddelivery.navigation.Screens
 import com.prashant.fooddelivery.uielement.UIElements
 
@@ -37,7 +38,7 @@ fun ResetPassword(navController: NavController) {
     val uiElements = UIElements()
     uiElements.ImageBackground(
         painter = painterResource(id = R.drawable.password_bg),
-        isBackVisible = true,
+        isBackVisible = IsVisible.VISIBLE,
         backClick = {
             Log.e("TAG", "ImageBackground: backClick()")
             navController.popBackStack()

@@ -39,9 +39,8 @@ fun Login(navController: NavController) {
     BackHandler {
         activity?.finishAffinity()
     }
-    with(UIElements()){
+    with(UIElements()) {
         ImageBackground(painter = painterResource(R.drawable.login_pasta), backClick = {}) {
-
             Text(
                 modifier = Modifier.fillMaxWidth(),
                 text = stringResource(id = R.string.login),
@@ -50,7 +49,11 @@ fun Login(navController: NavController) {
                 textAlign = TextAlign.Center,
             )
             Spacer(modifier = Modifier.height(40.dp))
-            CustomTextField(phone = phone, onValueChange = { phone = it })
+            CustomTextField(phone = phone, onValueChange = {
+                if (it.isEmpty() || it.matches(pattern)) {
+                    phone = it
+                }
+            })
             Spacer(modifier = Modifier.height(20.dp))
             CustomPasswordTextField(
                 password = password,

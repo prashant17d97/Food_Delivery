@@ -20,7 +20,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -28,6 +27,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.prashant.fooddelivery.R
+import com.prashant.fooddelivery.enums.IsVisible
 import com.prashant.fooddelivery.navigation.RestPassword
 import com.prashant.fooddelivery.navigation.Screens
 import com.prashant.fooddelivery.uielement.UIElements
@@ -38,7 +38,7 @@ fun ForgotPassword(navController: NavController) {
     with(UIElements()) {
         ImageBackground(
             painter = painterResource(id = R.drawable.forgot_password),
-            isBackVisible = true,
+            isBackVisible = IsVisible.VISIBLE,
             backClick = {
                 Log.e("TAG", "ImageBackground: backClick()")
                 navController.popBackStack()
@@ -68,11 +68,15 @@ fun ForgotPassword(navController: NavController) {
             )
             Spacer(modifier = Modifier.height(20.dp))
             CustomTextField(
-                phone = phone, onValueChange = { phone = it },
+                phone = phone,
+                onValueChange = {
+                    if (it.isEmpty() || it.matches(pattern)) {
+                        phone = it
+                    }
+                },
                 leadingIcon = ImageVector.vectorResource(
                     id = R.drawable.phone_icon
                 ),
-                keyboardType = KeyboardType.Number,
                 imeAction = ImeAction.Done,
                 charLimit = 10,
                 singleLine = true,

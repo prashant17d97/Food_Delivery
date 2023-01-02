@@ -28,6 +28,7 @@ const val home = "Home"
 const val tracking = "Tracking"
 const val checkout = "Checkout"
 const val account = "Account"
+const val search = "Search"
 
 sealed class Screens(var title: String, var icon: Int = 0, var route: String) {
 
@@ -40,6 +41,7 @@ sealed class Screens(var title: String, var icon: Int = 0, var route: String) {
     object Tracking : Screens(tracking, R.drawable.map_icon, route = tracking)
     object Checkout : Screens(checkout, R.drawable.checkout_icon, route = checkout)
     object Account : Screens(account, R.drawable.user_icon, route = account)
+    object Search : Screens(search, route = search)
 
     /** OnBoarding screen Controls*/
     object Login : Screens(title = login, route = login)

@@ -9,13 +9,14 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.prashant.fooddelivery.ui.Account
 import com.prashant.fooddelivery.ui.Checkout
-import com.prashant.fooddelivery.ui.Home
+import com.prashant.fooddelivery.ui.home.Home
 import com.prashant.fooddelivery.ui.Tracking
 import com.prashant.fooddelivery.ui.forgot.ForgotPassword
 import com.prashant.fooddelivery.ui.login.Login
 import com.prashant.fooddelivery.ui.otp.OTP
 import com.prashant.fooddelivery.ui.registration.Registration
 import com.prashant.fooddelivery.ui.restpassword.ResetPassword
+import com.prashant.fooddelivery.ui.search.Search
 
 
 @Composable
@@ -54,6 +55,9 @@ fun SetupNavGraph(navController: NavHostController) {
         }
         composable(route = Screens.ResetPassword.route) {
             ResetPassword(navController)
+        }
+        composable(route = Screens.Search.route) {
+            Search(navController)
         }
     }
 }
