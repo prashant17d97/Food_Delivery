@@ -498,7 +498,7 @@ class UIElements {
         enabled: Boolean = true,
         leadingIcon: ImageVector = ImageVector.vectorResource(id = R.drawable.phone_icon),
         leadingIconColor: Color = colorResource(id = R.color.white),
-        trailingIcon: ImageVector = ImageVector.vectorResource(id = R.drawable.phone_icon),
+        trailingIcon: ImageVector = ImageVector.vectorResource(id = R.drawable.filter_icon),
         trailingIconColor: Color = colorResource(id = R.color.white),
     ) {
         var viewSuggestion by remember {
@@ -574,7 +574,10 @@ class UIElements {
                     ),
                     trailingIcon = {
                         if (trailingIconRequire) {
-                            IconButton(onClick = { onTrailingClick() }) {
+                            IconButton(onClick = {
+                                keyBoardControl?.hide()
+                                focusManager.clearFocus(true)
+                                onTrailingClick() }) {
                                 Icon(
                                     imageVector = trailingIcon,
                                     contentDescription = "trailingIcon",
