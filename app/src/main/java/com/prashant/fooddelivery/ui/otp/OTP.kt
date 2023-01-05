@@ -24,10 +24,16 @@ import com.prashant.fooddelivery.enums.IsVisible
 import com.prashant.fooddelivery.navigation.RestPassword
 import com.prashant.fooddelivery.navigation.Screens
 import com.prashant.fooddelivery.navigation.comingFrom
+import com.prashant.fooddelivery.navigation.name
 import com.prashant.fooddelivery.uielement.UIElements
 
 @Composable
 fun OTP(navController: NavController) {
+
+    val from = navController.currentBackStackEntry?.arguments?.getString(comingFrom)
+    val name =
+        (navController.currentBackStackEntry?.arguments?.getString(name) ?: "").removeSuffix("}")
+    Log.e("TAG", "OTP: $from,$name")
     with(UIElements()) {
         ImageBackground(
             painter = painterResource(id = R.drawable.otp_food),
@@ -64,11 +70,10 @@ fun OTP(navController: NavController) {
             GradientButtonNoRipple(
                 textOnButton = stringResource(id = R.string.verify),
                 onClick = {
-                    val from = navController.currentBackStackEntry?.arguments?.getString(comingFrom)
-                    val route = if (RestPassword == from) {
+                    val route = if (from?.contains(RestPassword) == true) {
                         Screens.ResetPassword.route
                     } else {
-                        Screens.Login.route
+                        Screens.Welcome.nameArgs(name)
                     }
                     navController.navigate(route) {
                         popUpTo(Screens.OTP.route) {

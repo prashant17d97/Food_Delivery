@@ -35,59 +35,60 @@ import com.prashant.fooddelivery.uielement.UIElements
 @Composable
 fun ResetPassword(navController: NavController) {
     var newPassword by rememberSaveable { mutableStateOf("") }
-    val uiElements = UIElements()
-    uiElements.ImageBackground(
-        painter = painterResource(id = R.drawable.password_bg),
-        isBackVisible = IsVisible.VISIBLE,
-        backClick = {
-            Log.e("TAG", "ImageBackground: backClick()")
-            navController.popBackStack()
-        },
-        columnVerticalArrangement = Arrangement.Top
-    ) {
-        Image(
-            painter = painterResource(id = R.drawable.lock_open),
-            modifier = Modifier.size(120.dp), contentDescription = "Forget"
-        )
-        Spacer(modifier = Modifier.height(10.dp))
-        Text(
-            text = stringResource(id = R.string.new_password),
-            style = MaterialTheme.typography.body1.copy(
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold
-            )
-        )
-        Spacer(modifier = Modifier.height(10.dp))
-        Text(
-            text = stringResource(id = R.string.create_new_pass),
-            style = MaterialTheme.typography.subtitle1.copy(
-                fontSize = 12.sp,
-                fontWeight = FontWeight.Normal
-            ),
-            textAlign = TextAlign.Center
-        )
-        Spacer(modifier = Modifier.height(20.dp))
-        uiElements.CustomPasswordTextField(
-            password = newPassword, onValueChange = { newPassword = it },
-            leadingIcon = ImageVector.vectorResource(
-                id = R.drawable.lock_open
-            ),
-            keyboardType = KeyboardType.Password,
-            imeAction = ImeAction.Done,
-            singleLine = true,
-            placeholderText = stringResource(id = R.string.new_password)
-        )
-        Spacer(modifier = Modifier.height(30.dp))
-        uiElements.GradientButtonNoRipple(
-            textOnButton = stringResource(id = R.string.confirm_password),
-            onClick = {
-                navController.navigate(Screens.Login.route) {
-                    this.popUpTo(Screens.Login.route) {
-                        this.inclusive = true
-                    }
-                }
+    with(UIElements()){
+        ImageBackground(
+            painter = painterResource(id = R.drawable.password_bg),
+            isBackVisible = IsVisible.VISIBLE,
+            backClick = {
+                Log.e("TAG", "ImageBackground: backClick()")
+                navController.popBackStack()
             },
-        )
+            columnVerticalArrangement = Arrangement.Top
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.lock_open),
+                modifier = Modifier.size(120.dp), contentDescription = "Forget"
+            )
+            Spacer(modifier = Modifier.height(10.dp))
+            Text(
+                text = stringResource(id = R.string.new_password),
+                style = MaterialTheme.typography.body1.copy(
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold
+                )
+            )
+            Spacer(modifier = Modifier.height(10.dp))
+            Text(
+                text = stringResource(id = R.string.create_new_pass),
+                style = MaterialTheme.typography.subtitle1.copy(
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.Normal
+                ),
+                textAlign = TextAlign.Center
+            )
+            Spacer(modifier = Modifier.height(20.dp))
+            CustomPasswordTextField(
+                password = newPassword, onValueChange = { newPassword = it },
+                leadingIcon = ImageVector.vectorResource(
+                    id = R.drawable.lock_open
+                ),
+                keyboardType = KeyboardType.Password,
+                imeAction = ImeAction.Done,
+                singleLine = true,
+                placeholderText = stringResource(id = R.string.new_password)
+            )
+            Spacer(modifier = Modifier.height(30.dp))
+            GradientButtonNoRipple(
+                textOnButton = stringResource(id = R.string.confirm_password),
+                onClick = {
+                    navController.navigate(Screens.Login.route) {
+                        this.popUpTo(Screens.Login.route) {
+                            this.inclusive = true
+                        }
+                    }
+                },
+            )
+        }
     }
 }
 

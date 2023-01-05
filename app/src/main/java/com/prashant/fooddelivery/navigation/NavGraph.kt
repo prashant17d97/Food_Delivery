@@ -17,6 +17,7 @@ import com.prashant.fooddelivery.ui.otp.OTP
 import com.prashant.fooddelivery.ui.registration.Registration
 import com.prashant.fooddelivery.ui.restpassword.ResetPassword
 import com.prashant.fooddelivery.ui.search.Search
+import com.prashant.fooddelivery.ui.welcome.Welcome
 
 
 @Composable
@@ -49,6 +50,9 @@ fun SetupNavGraph(navController: NavHostController) {
             arguments = listOf(
                 navArgument(comingFrom) {
                     type = NavType.StringType
+                },
+                navArgument(name) {
+                    type = NavType.StringType
                 }
             )) {
             OTP(navController)
@@ -58,6 +62,15 @@ fun SetupNavGraph(navController: NavHostController) {
         }
         composable(route = Screens.Search.route) {
             Search(navController)
+        }
+
+        composable(route = Screens.Welcome.route,
+            arguments = listOf(
+                navArgument(name) {
+                    type = NavType.StringType
+                }
+            )) {
+            Welcome(navController)
         }
     }
 }

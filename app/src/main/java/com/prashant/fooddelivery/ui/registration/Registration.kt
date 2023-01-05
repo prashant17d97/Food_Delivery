@@ -114,7 +114,7 @@ fun Registration(navController: NavController) {
             GradientButtonNoRipple(
                 textOnButton = stringResource(id = R.string.registration),
                 onClick = {
-                    navController.navigate(Screens.OTP.otpArgs(RegistrationScreen)) {
+                    navController.navigate(Screens.OTP.requireArguments(RegistrationScreen,name)) {
                         this.popUpTo(Screens.Registration.route) {
                             this.inclusive = true
                         }

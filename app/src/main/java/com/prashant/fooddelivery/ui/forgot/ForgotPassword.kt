@@ -86,7 +86,7 @@ fun ForgotPassword(navController: NavController) {
             GradientButtonNoRipple(
                 textOnButton = stringResource(id = R.string.send),
                 onClick = {
-                    navController.navigate(Screens.OTP.otpArgs(RestPassword)) {
+                    navController.navigate(Screens.OTP.requireArguments(RestPassword,"")) {
                         this.popUpTo(Screens.ForgotPassword.route) {
                             this.inclusive = true
                         }
