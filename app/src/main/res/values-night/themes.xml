@@ -3,7 +3,6 @@
 
     <style name="Theme.FoodDelivery" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:statusBarColor">@color/app_bg</item>
-        <item name="android:windowLightStatusBar">true</item>
         <item name="android:textColor">@color/text_color</item>
     </style>
 <!--

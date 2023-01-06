@@ -7,9 +7,4 @@
         <item name="android:textColor">@color/text_color</item>
     </style>
 
-   <!-- <style name="Theme.Splash" parent="Theme.SplashScreen">
-        <item name="windowSplashScreenBackground">@color/app_bg</item>
-        <item name="windowSplashScreenAnimatedIcon">@drawable/main_logo</item>
-        <item name="postSplashScreenTheme">@style/Theme.FoodDelivery</item>
-    </style>-->
 </resources>

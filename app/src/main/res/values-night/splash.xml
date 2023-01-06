@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Splash" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">#353E40</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/main_logo_night</item>
+        <item name="postSplashScreenTheme">@style/Theme.FoodDelivery</item>
+
+    </style>
+</resources>

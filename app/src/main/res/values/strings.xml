@@ -1,3 +1,29 @@
 <resources>
     <string name="app_name">Food Delivery</string>
+    <string name="phone">Phone</string>
+    <string name="password">Password</string>
+    <string name="new_password">New Password</string>
+    <string name="confirm_password">Confirm password</string>
+    <string name="login">Login</string>
+    <string name="send">Send</string>
+    <string name="verify">Verify</string>
+    <string name="search_hint">Are you hungry?....</string>
+    <string name="registration">Registration</string>
+    <string name="already_have_ac">Do you already have an account? </string>
+    <string name="forgot_pass">Forgot Password</string>
+    <string name="sms_pass">SMS password</string>
+    <string name="sms_pass_msg">Insert a four-digit code from SMS.</string>
+    <string name="forgot_pass_msg">Write your phone number and we will send a password recovery code.</string>
+    <string name="create_new_pass">Create your new strong password.</string>
+    <string name="create_new_account">Create new account</string>
+    <string name="name">Name</string>
+    <string name="popular_categories">Popular categories</string>
+    <string name="nearby_rest">Restaurants nearby</string>
+    <string name="best_dishes">Best Dishes</string>
+    <string name="all_menus">All menus</string>
+    <string name="similar_dishes">Similar dishes</string>
+    <string name="welcome">Welcome,</string>
+    <string name="comments">Comments</string>
+    <string name="welcome_message">Food Delivery is your faithful assistant in the fight against hunger!</string>
+
 </resources>
