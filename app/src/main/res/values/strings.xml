@@ -20,7 +20,10 @@
     <string name="popular_categories">Popular categories</string>
     <string name="nearby_rest">Restaurants nearby</string>
     <string name="best_dishes">Best Dishes</string>
+    <string name="all_menus">All menus</string>
+    <string name="similar_dishes">Similar dishes</string>
     <string name="welcome">Welcome,</string>
+    <string name="comments">Comments</string>
     <string name="welcome_message">Food Delivery is your faithful assistant in the fight against hunger!</string>
 
 </resources>

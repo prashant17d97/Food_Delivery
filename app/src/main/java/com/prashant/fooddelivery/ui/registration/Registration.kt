@@ -7,8 +7,11 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -28,6 +31,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.prashant.fooddelivery.R
+import com.prashant.fooddelivery.methods.CommonMethod.toast
 import com.prashant.fooddelivery.navigation.RegistrationScreen
 import com.prashant.fooddelivery.navigation.Screens
 import com.prashant.fooddelivery.uielement.UIElements
@@ -114,12 +118,24 @@ fun Registration(navController: NavController) {
             GradientButtonNoRipple(
                 textOnButton = stringResource(id = R.string.registration),
                 onClick = {
-                    navController.navigate(Screens.OTP.requireArguments(RegistrationScreen,name)) {
-                        this.popUpTo(Screens.Registration.route) {
-                            this.inclusive = true
+                    if (validate(
+                            name.trim(),
+                            number = phone,
+                            password = password,
+                            confirmPassword = confirmPassword
+                        )
+                    ) {
+                        navController.navigate(
+                            Screens.OTP.requireArguments(
+                                RegistrationScreen,
+                                name
+                            )
+                        ) {
+                            this.popUpTo(Screens.Registration.route) {
+                                this.inclusive = true
+                            }
                         }
                     }
-
                 }
             )
             Spacer(modifier = Modifier.height(50.dp))
@@ -145,3 +161,26 @@ fun Registration(navController: NavController) {
 @Preview
 @Composable
 fun RegistrationPreview() = Registration(navController = rememberNavController())
+
+fun validate(name: String, number: String, password: String, confirmPassword: String): Boolean {
+    return when {
+        name.isBlank() -> {
+            toast("Name field is not allowed to be empty")
+            false
+        }
+        number.isBlank() -> {
+            toast("Number field is not allowed to be empty")
+            false
+        }
+        password.isBlank() -> {
+            toast("Please enter confirm password")
+            false
+        }
+        confirmPassword.isBlank() -> {
+            toast("Please enter confirm password")
+            false
+        }
+        else -> true
+    }
+}
+

@@ -30,9 +30,9 @@ import com.prashant.fooddelivery.uielement.UIElements
 @Composable
 fun OTP(navController: NavController) {
 
-    val from = navController.currentBackStackEntry?.arguments?.getString(comingFrom)
+    val from = navController.currentBackStackEntry?.arguments?.getString(comingFrom)?.removePrefix("{")?: ""
     val name =
-        (navController.currentBackStackEntry?.arguments?.getString(name) ?: "").removeSuffix("}")
+        (navController.currentBackStackEntry?.arguments?.getString(name))?.removeSuffix("}")?: ""
     Log.e("TAG", "OTP: $from,$name")
     with(UIElements()) {
         ImageBackground(
@@ -70,7 +70,7 @@ fun OTP(navController: NavController) {
             GradientButtonNoRipple(
                 textOnButton = stringResource(id = R.string.verify),
                 onClick = {
-                    val route = if (from?.contains(RestPassword) == true) {
+                    val route = if (from==RestPassword) {
                         Screens.ResetPassword.route
                     } else {
                         Screens.Welcome.nameArgs(name)

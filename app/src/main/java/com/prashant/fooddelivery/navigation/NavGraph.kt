@@ -9,12 +9,14 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.prashant.fooddelivery.ui.Account
 import com.prashant.fooddelivery.ui.Checkout
-import com.prashant.fooddelivery.ui.home.Home
+import com.prashant.fooddelivery.ui.ItemPage
 import com.prashant.fooddelivery.ui.Tracking
 import com.prashant.fooddelivery.ui.forgot.ForgotPassword
+import com.prashant.fooddelivery.ui.home.Home
 import com.prashant.fooddelivery.ui.login.Login
 import com.prashant.fooddelivery.ui.otp.OTP
 import com.prashant.fooddelivery.ui.registration.Registration
+import com.prashant.fooddelivery.ui.restaurant.RestaurantsPage
 import com.prashant.fooddelivery.ui.restpassword.ResetPassword
 import com.prashant.fooddelivery.ui.search.Search
 import com.prashant.fooddelivery.ui.welcome.Welcome
@@ -71,6 +73,19 @@ fun SetupNavGraph(navController: NavHostController) {
                 }
             )) {
             Welcome(navController)
+        }
+        composable(
+            route = Screens.RestaurantsPage.route,
+            arguments = listOf(
+                navArgument(restaurantPageArgs) {
+                    type = NavType.StringType
+                }
+            )
+        ) {
+            RestaurantsPage(navController)
+        }
+        composable(Screens.ItemPage.route) {
+            ItemPage(navController)
         }
     }
 }

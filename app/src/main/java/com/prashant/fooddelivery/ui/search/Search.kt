@@ -31,6 +31,7 @@ import com.gowtham.ratingbar.RatingBarConfig
 import com.gowtham.ratingbar.RatingBarStyle
 import com.prashant.fooddelivery.R
 import com.prashant.fooddelivery.models.RestaurantDishModel
+import com.prashant.fooddelivery.navigation.Screens
 import com.prashant.fooddelivery.uielement.UIElements
 import kotlinx.coroutines.launch
 
@@ -137,7 +138,9 @@ fun Search(navController: NavController) {
                 horizontalArrangement = Arrangement.SpaceBetween,
                 content = {
                     items(count = dishes.size, itemContent = { item ->
-                        UIElements().RestaurantDishCard(dishes[item])
+                        UIElements().RestaurantDishCard(dishes[item], isBottomRowRequire = true,isSpan=true, onCardClick = {
+                            navController.navigate(Screens.ItemPage.route)
+                        })
                     })
                 }
             )
@@ -147,7 +150,9 @@ fun Search(navController: NavController) {
                 horizontalArrangement = Arrangement.SpaceBetween,
                 content = {
                     items(count = dishes.size, itemContent = { item ->
-                        UIElements().RestaurantDishCard(dishes[item])
+                        UIElements().RestaurantDishCard(dishes[item], isBottomRowRequire = true,isSpan=true, onCardClick = {
+                            navController.navigate(Screens.ItemPage.route)
+                        })
                     })
                 }
             )
@@ -160,8 +165,9 @@ fun Search(navController: NavController) {
                 rating = rating,
                 slider = slider,
                 sliderValues = { slider = it },
-                ratingValues = { rating = it
-                    Log.e("TAG", "Search: $slider, $rating", )
+                ratingValues = {
+                    rating = it
+                    Log.e("TAG", "Search: $slider, $rating")
                 }
             )
         },
@@ -229,7 +235,7 @@ fun BottomSheet(
                 value = slider,
                 onValueChange = { sliderValues(it) },
                 valueRange = 1000f..10000f,
-                steps=20,
+                steps = 20,
                 colors = SliderDefaults.colors(
                     thumbColor = MaterialTheme.colors.primaryVariant,
                     activeTrackColor = MaterialTheme.colors.primaryVariant

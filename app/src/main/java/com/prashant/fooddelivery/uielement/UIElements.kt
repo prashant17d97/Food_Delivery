@@ -5,6 +5,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.*
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
@@ -15,6 +16,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.*
@@ -40,6 +42,7 @@ import com.prashant.fooddelivery.R
 import com.prashant.fooddelivery.enums.IsVisible
 import com.prashant.fooddelivery.methods.CommonMethod.toast
 import com.prashant.fooddelivery.models.CategoriesModel
+import com.prashant.fooddelivery.models.CommentModel
 import com.prashant.fooddelivery.models.RestaurantDishModel
 import com.prashant.fooddelivery.models.SuggestionModel
 
@@ -577,7 +580,8 @@ class UIElements {
                             IconButton(onClick = {
                                 keyBoardControl?.hide()
                                 focusManager.clearFocus(true)
-                                onTrailingClick() }) {
+                                onTrailingClick()
+                            }) {
                                 Icon(
                                     imageVector = trailingIcon,
                                     contentDescription = "trailingIcon",
@@ -752,16 +756,26 @@ class UIElements {
     }
 
     @Composable
-    fun RestaurantDishCard(restaurantDishModel: RestaurantDishModel) {
+    fun RestaurantDishCard(
+        restaurantDishModel: RestaurantDishModel,
+        isBottomRowRequire: Boolean,
+        isSpan: Boolean=false,
+        onCardClick: () -> Unit = {}
+    ) {
         Card(
             shape = MaterialTheme.shapes.medium,
             modifier = Modifier
+                .clickable { onCardClick() }
                 .width(180.dp)
                 .padding(
-                    end = if (restaurantDishModel.isRestaurant) {
+                    end = if (restaurantDishModel.isRestaurant ) {
                         10.dp
                     } else {
-                        0.dp
+                        if (isBottomRowRequire&& !isSpan) {
+                            10.dp
+                        } else {
+                            0.dp
+                        }
                     }, bottom = 10.dp
                 ),
             backgroundColor = colorResource(id = R.color.card_bg)
@@ -833,7 +847,7 @@ class UIElements {
                     }
                 )
 
-                if (!restaurantDishModel.isRestaurant) {
+                if (isBottomRowRequire) {
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -880,12 +894,98 @@ class UIElements {
                     }
                 }
             }
+        }
 
+    }
+
+    @Composable
+    fun CommentCard(
+        commentModel: CommentModel = CommentModel(
+            image = R.drawable.user_photo,
+            name = "Prashant",
+            date = "12-01-2023",
+            comment = "h"
+        )
+    ) {
+        Column(modifier = Modifier.fillMaxWidth()) {
+            Row(
+                verticalAlignment = Alignment.Top,
+                horizontalArrangement = Arrangement.SpaceEvenly,
+                modifier = Modifier
+                    .background(
+                        color = colorResource(id = R.color.card_bg),
+                        shape = MaterialTheme.shapes.medium
+                    )
+                    .padding(10.dp)
+                    .fillMaxWidth()
+            ) {
+                Image(
+                    painter = painterResource(commentModel.image),
+                    contentDescription = "avatar",
+                    contentScale = ContentScale.Crop,            // crop the image if it's not a square
+                    modifier = Modifier
+                        .size(64.dp)
+                        .clip(CircleShape)// clip to the circle shape
+                        .weight(0.7f),
+                    alignment = Alignment.Center
+                )
+                Spacer(modifier = Modifier.width(10.dp))
+                Column(
+                    verticalArrangement = Arrangement.SpaceEvenly,
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier.weight(3.2f)
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.Bottom,
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text(
+                            text = commentModel.name , style = MaterialTheme.typography.body1.copy(
+                                color = colorResource(
+                                    id = R.color.text_color
+                                ),
+                                fontSize = 14.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                        )
+                        Text(
+                            text = commentModel.date, style = MaterialTheme.typography.body1.copy(
+                                color = colorResource(
+                                    id = R.color.text_color
+                                ),
+                                fontSize = 12.sp,
+                                fontWeight = FontWeight.Light
+                            )
+                        )
+                    }
+                    Spacer(modifier = Modifier.height(5.dp))
+                    Text(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = "Great meal, fast delivery! Everything was delicious. I also liked how it was packaged and served, thanks!",
+                        style = MaterialTheme.typography.body1.copy(
+                            color = colorResource(
+                                id = R.color.text_color
+                            ),
+                            fontSize = 12.sp,
+                            fontWeight = FontWeight.Light
+                        )
+                    )
+                }
+            }
+            Spacer(modifier = Modifier.height(10.dp))
         }
     }
 
     @Preview
     @Composable
-    fun PreviewUiElements() = SearchCard(value = "", onValueChange = {})
+    fun PreviewUiElements() = CommentCard(
+        CommentModel(
+            image = R.drawable.user_photo,
+            name = "Prashant",
+            date = "12-01-2023",
+            comment = "JB"
+        )
+    )
 }
 

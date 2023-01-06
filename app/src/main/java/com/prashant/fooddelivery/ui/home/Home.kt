@@ -23,6 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.google.gson.Gson
 import com.prashant.fooddelivery.R
 import com.prashant.fooddelivery.models.CategoriesModel
 import com.prashant.fooddelivery.models.RestaurantDishModel
@@ -136,94 +137,109 @@ fun Home(navController: NavController) {
                 }, enabled = false
             )
         }
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState()),
-            verticalArrangement = Arrangement.Top,
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-
-            Spacer(modifier = Modifier.height(20.dp))
-            Text(
-                text = stringResource(id = R.string.popular_categories),
-                modifier = Modifier.fillMaxWidth(),
-                style = MaterialTheme.typography.body2.copy(
-                    color = colorResource(
-                        id = R.color.text_color
-                    )
-                )
-            )
-            Spacer(modifier = Modifier.height(10.dp))
-
-            LazyRow(modifier = Modifier.fillMaxWidth()) {
-                items(count = categories.size, itemContent = { item ->
-                    UIElements().CategoryCard(categories[item])
-                })
-            }
-
-            Spacer(modifier = Modifier.height(10.dp))
-            Text(
-                text = stringResource(id = R.string.nearby_rest),
-                modifier = Modifier.fillMaxWidth(),
-                style = MaterialTheme.typography.body2.copy(
-                    color = colorResource(
-                        id = R.color.text_color
-                    )
-                )
-            )
-            Spacer(modifier = Modifier.height(10.dp))
-            LazyRow(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
+        with(UIElements()) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState()),
+                verticalArrangement = Arrangement.Top,
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                items(count = restaurants.size, itemContent = { item ->
-                    UIElements().RestaurantDishCard(restaurants[item])
-                })
-            }
 
-            Text(
-                text = stringResource(id = R.string.best_dishes),
-                modifier = Modifier.fillMaxWidth(),
-                style = MaterialTheme.typography.body2.copy(
-                    color = colorResource(
-                        id = R.color.text_color
+                Spacer(modifier = Modifier.height(20.dp))
+                Text(
+                    text = stringResource(id = R.string.popular_categories),
+                    modifier = Modifier.fillMaxWidth(),
+                    style = MaterialTheme.typography.body2.copy(
+                        color = colorResource(
+                            id = R.color.text_color
+                        )
                     )
                 )
-            )
-            Spacer(modifier = Modifier.height(10.dp))
+                Spacer(modifier = Modifier.height(10.dp))
 
-            LazyRow(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween,
-                content = {
-                    items(count = dishes.size, itemContent = { item ->
-                        UIElements().RestaurantDishCard(dishes[item])
+                LazyRow(modifier = Modifier.fillMaxWidth()) {
+                    items(count = categories.size, itemContent = { item ->
+                        CategoryCard(categories[item])
                     })
                 }
-            )
-            LazyRow(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween,
-                content = {
-                    items(count = dishes.size, itemContent = { item ->
-                        UIElements().RestaurantDishCard(dishes[item])
+
+                Spacer(modifier = Modifier.height(10.dp))
+                Text(
+                    text = stringResource(id = R.string.nearby_rest),
+                    modifier = Modifier.fillMaxWidth(),
+                    style = MaterialTheme.typography.body2.copy(
+                        color = colorResource(
+                            id = R.color.text_color
+                        )
+                    )
+                )
+                Spacer(modifier = Modifier.height(10.dp))
+                LazyRow(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    items(count = restaurants.size, itemContent = { index ->
+                        RestaurantDishCard(restaurants[index], onCardClick = {
+                            navController.navigate(
+                                Screens.RestaurantsPage.restaurantPageRequireArgs(
+                                    Gson().toJson(restaurants[index])
+                                )
+                            )
+                        }, isBottomRowRequire = false)
                     })
                 }
-            )
-            LazyRow(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween,
-                content = {
-                    items(count = dishes.size, itemContent = { item ->
-                        UIElements().RestaurantDishCard(dishes[item])
-                    })
-                }
-            )
+
+                Text(
+                    text = stringResource(id = R.string.best_dishes),
+                    modifier = Modifier.fillMaxWidth(),
+                    style = MaterialTheme.typography.body2.copy(
+                        color = colorResource(
+                            id = R.color.text_color
+                        )
+                    )
+                )
+                Spacer(modifier = Modifier.height(10.dp))
+
+                LazyRow(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    content = {
+                        items(count = dishes.size, itemContent = { item ->
+                            RestaurantDishCard(dishes[item], isBottomRowRequire = true,
+                                isSpan=true,onCardClick = {
+                                navController.navigate(Screens.ItemPage.route)
+                            })
+                        })
+                    }
+                )
+                LazyRow(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    content = {
+                        items(count = dishes.size, itemContent = { item ->
+                            RestaurantDishCard(dishes[item], isBottomRowRequire = true,isSpan=true, onCardClick = {
+                                navController.navigate(Screens.ItemPage.route)
+                            })
+                        })
+                    }
+                )
+                LazyRow(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    content = {
+                        items(count = dishes.size, itemContent = { item ->
+                            RestaurantDishCard(dishes[item], isBottomRowRequire = true,isSpan=true, onCardClick = {
+                                navController.navigate(Screens.ItemPage.route)
+                            })
+                        })
+                    }
+                )
+            }
         }
     }
 }
