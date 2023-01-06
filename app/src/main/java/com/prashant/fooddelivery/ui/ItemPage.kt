@@ -5,15 +5,19 @@ import androidx.compose.foundation.*
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.text.InlineTextContent
+import androidx.compose.foundation.text.appendInlineContent
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.Placeholder
+import androidx.compose.ui.text.PlaceholderVerticalAlign
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -85,13 +89,51 @@ fun ItemPage(navController: NavController) {
                     .fillMaxWidth()
                     .padding(10.dp)
             ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_back),
-                    contentDescription = "",
-                    modifier = Modifier.clickable(
-                        onClick = { navController.popBackStack() }
+                val myId = "inlineContent"
+                val text = buildAnnotatedString {
+                    appendInlineContent(myId, "[icon]")
+                    append(" Back")
+
+                }
+
+                val inlineContent = mapOf(
+                    Pair(
+                        // This tells the [CoreText] to replace the placeholder string "[icon]" by
+                        // the composable given in the [InlineTextContent] object.
+                        myId,
+                        InlineTextContent(
+                            // Placeholder tells text layout the expected size and vertical alignment of
+                            // children composable.
+                            Placeholder(
+                                width = 12.sp,
+                                height = 12.sp,
+                                placeholderVerticalAlign = PlaceholderVerticalAlign.AboveBaseline
+                            )
+                        ) {
+                            // This Icon will fill maximum size, which is specified by the [Placeholder]
+                            // above. Notice the width and height in [Placeholder] are specified in TextUnit,
+                            // and are converted into pixel by text layout.
+
+                            Icon(painterResource(id = R.drawable.ic_back), "")
+                        }
                     )
                 )
+
+                Text(
+                    text = text,
+                    modifier = Modifier
+                        .width(100.dp)
+                        .clickable(
+                            onClick = { navController.popBackStack() }
+                        ),
+                    style = MaterialTheme.typography.body1.copy(
+                        color = colorResource(id = R.color.text_color),
+                        fontWeight = FontWeight.SemiBold
+                    ),
+                    inlineContent = inlineContent,
+                    textAlign = TextAlign.Start
+                )
+
                 Icon(
                     modifier = Modifier.clickable(
                         interactionSource = remember { MutableInteractionSource() },
@@ -282,9 +324,12 @@ fun ItemPage(navController: NavController) {
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 items(count = restaurants.size, itemContent = { index ->
-                    RestaurantDishCard(restaurants[index], isBottomRowRequire = true, onCardClick = {
-                        navController.navigate(Screens.ItemPage.route)
-                    })
+                    RestaurantDishCard(
+                        restaurants[index],
+                        isBottomRowRequire = true,
+                        onCardClick = {
+                            navController.navigate(Screens.ItemPage.route)
+                        })
                 })
             }
             Spacer(modifier = Modifier.height(10.dp))

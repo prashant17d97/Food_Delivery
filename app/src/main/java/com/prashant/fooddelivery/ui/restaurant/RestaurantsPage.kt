@@ -1,13 +1,14 @@
 package com.prashant.fooddelivery.ui.restaurant
 
 import android.util.Log
-import androidx.activity.compose.BackHandler
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.*
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.text.InlineTextContent
+import androidx.compose.foundation.text.appendInlineContent
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -18,6 +19,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.Placeholder
+import androidx.compose.ui.text.PlaceholderVerticalAlign
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -44,7 +49,7 @@ fun RestaurantsPage(navController: NavController) {
             "Praesent sodales scelerisque eros at rhoncus. Duis posuere sapien vel ipsum" +
             "ornare interdum at eu quam. Vestibulum vel massa erat. Aenean quis sagittis" +
             "purus. Phasellus arcu purus, rutrum id consectetur non, bibendum at nibh."
-    var showMore by rememberSaveable() {
+    var showMore by rememberSaveable {
         mutableStateOf(false)
     }
     val restaurants = listOf(
@@ -137,12 +142,49 @@ fun RestaurantsPage(navController: NavController) {
                     .fillMaxWidth()
                     .padding(10.dp)
             ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_back),
-                    contentDescription = "",
-                    modifier = Modifier.clickable(
-                        onClick = { navController.popBackStack() }
+                val myId = "inlineContent"
+                val text = buildAnnotatedString {
+                    appendInlineContent(myId, "[icon]")
+                    append(" Back")
+
+                }
+
+                val inlineContent = mapOf(
+                    Pair(
+                        // This tells the [CoreText] to replace the placeholder string "[icon]" by
+                        // the composable given in the [InlineTextContent] object.
+                        myId,
+                        InlineTextContent(
+                            // Placeholder tells text layout the expected size and vertical alignment of
+                            // children composable.
+                            Placeholder(
+                                width = 12.sp,
+                                height = 12.sp,
+                                placeholderVerticalAlign = PlaceholderVerticalAlign.AboveBaseline
+                            )
+                        ) {
+                            // This Icon will fill maximum size, which is specified by the [Placeholder]
+                            // above. Notice the width and height in [Placeholder] are specified in TextUnit,
+                            // and are converted into pixel by text layout.
+
+                            Icon(painterResource(id = R.drawable.ic_back), "")
+                        }
                     )
+                )
+
+                Text(
+                    text = text,
+                    modifier = Modifier
+                        .width(100.dp)
+                        .clickable(
+                            onClick = { navController.popBackStack() }
+                        ),
+                    style = MaterialTheme.typography.body1.copy(
+                        color = colorResource(id = R.color.text_color),
+                        fontWeight = FontWeight.SemiBold
+                    ),
+                    inlineContent = inlineContent,
+                    textAlign = TextAlign.Start
                 )
                 Icon(
                     modifier = Modifier.clickable(
@@ -244,9 +286,12 @@ fun RestaurantsPage(navController: NavController) {
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 items(count = restaurants.size, itemContent = { index ->
-                    RestaurantDishCard(restaurants[index], isBottomRowRequire = true, onCardClick = {
-                        navController.navigate(Screens.ItemPage.route)
-                    })
+                    RestaurantDishCard(
+                        restaurants[index],
+                        isBottomRowRequire = true,
+                        onCardClick = {
+                            navController.navigate(Screens.ItemPage.route)
+                        })
                 })
             }
 
@@ -267,9 +312,13 @@ fun RestaurantsPage(navController: NavController) {
                 horizontalArrangement = Arrangement.SpaceBetween,
                 content = {
                     items(count = menus.size, itemContent = { item ->
-                        RestaurantDishCard(menus[item], isBottomRowRequire = true,isSpan=true, onCardClick = {
-                            navController.navigate(Screens.ItemPage.route)
-                        })
+                        RestaurantDishCard(
+                            menus[item],
+                            isBottomRowRequire = true,
+                            isSpan = true,
+                            onCardClick = {
+                                navController.navigate(Screens.ItemPage.route)
+                            })
                     })
                 }
             )
@@ -279,9 +328,13 @@ fun RestaurantsPage(navController: NavController) {
                 horizontalArrangement = Arrangement.SpaceBetween,
                 content = {
                     items(count = menus.size, itemContent = { item ->
-                        RestaurantDishCard(menus[item], isBottomRowRequire = true,isSpan=true, onCardClick = {
-                            navController.navigate(Screens.ItemPage.route)
-                        })
+                        RestaurantDishCard(
+                            menus[item],
+                            isBottomRowRequire = true,
+                            isSpan = true,
+                            onCardClick = {
+                                navController.navigate(Screens.ItemPage.route)
+                            })
                     })
                 }
             )
@@ -291,9 +344,13 @@ fun RestaurantsPage(navController: NavController) {
                 horizontalArrangement = Arrangement.SpaceBetween,
                 content = {
                     items(count = menus.size, itemContent = { item ->
-                        RestaurantDishCard(menus[item], isBottomRowRequire = true,isSpan=true, onCardClick = {
-                            navController.navigate(Screens.ItemPage.route)
-                        })
+                        RestaurantDishCard(
+                            menus[item],
+                            isBottomRowRequire = true,
+                            isSpan = true,
+                            onCardClick = {
+                                navController.navigate(Screens.ItemPage.route)
+                            })
                     })
                 }
             )
