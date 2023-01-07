@@ -759,7 +759,7 @@ class UIElements {
     fun RestaurantDishCard(
         restaurantDishModel: RestaurantDishModel,
         isBottomRowRequire: Boolean,
-        isSpan: Boolean=false,
+        isSpan: Boolean = false,
         onCardClick: () -> Unit = {}
     ) {
         Card(
@@ -768,10 +768,10 @@ class UIElements {
                 .clickable { onCardClick() }
                 .width(180.dp)
                 .padding(
-                    end = if (restaurantDishModel.isRestaurant ) {
+                    end = if (restaurantDishModel.isRestaurant) {
                         10.dp
                     } else {
-                        if (isBottomRowRequire&& !isSpan) {
+                        if (isBottomRowRequire && !isSpan) {
                             10.dp
                         } else {
                             0.dp
@@ -941,7 +941,7 @@ class UIElements {
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         Text(
-                            text = commentModel.name , style = MaterialTheme.typography.body1.copy(
+                            text = commentModel.name, style = MaterialTheme.typography.body1.copy(
                                 color = colorResource(
                                     id = R.color.text_color
                                 ),
@@ -977,15 +977,103 @@ class UIElements {
         }
     }
 
+    @Composable
+    fun CheckoutItemCard(
+        onCardClick: () -> Unit
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(
+                        color = MaterialTheme.colors.primaryVariant,
+                        shape = MaterialTheme.shapes.medium
+                    ),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Row(
+                    modifier = Modifier
+                        .weight(0.9f)
+                        .background(
+                            color = colorResource(id = R.color.card_bg),
+                            shape = MaterialTheme.shapes.medium
+                        )
+                        .padding(horizontal = 10.dp),
+                    horizontalArrangement = Arrangement.Start,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.wavos),
+                        modifier = Modifier.size(width = 70.dp, height = 50.dp),
+                        contentDescription = ""
+                    )
+                    SpacerWidth(10.dp)
+                    Column(
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.Start,
+                        modifier = Modifier.padding(vertical = 10.dp)
+                    ) {
+
+                        Text(
+                            text = "Wavos rencheros", style = MaterialTheme.typography.body1.copy(
+                                color = colorResource(
+                                    id = R.color.text_color
+                                ),
+                                fontWeight = FontWeight.SemiBold,
+                                fontSize = 14.sp
+                            )
+                        )
+                        SpacerHeight(value = 5.dp)
+                        Text(
+                            text = "Wavos rencheros", style = MaterialTheme.typography.body1.copy(
+                                color = colorResource(
+                                    id = R.color.text_color
+                                ),
+                                fontWeight = FontWeight.Light,
+                                fontSize = 14.sp
+                            )
+                        )
+                    }
+                    SpacerWidth(20.dp)
+                    Text(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = "$ 5,25", style = MaterialTheme.typography.body1.copy(
+                            color = colorResource(
+                                id = R.color.price_color
+                            ),
+                            fontWeight = FontWeight.SemiBold,
+                            fontSize = 14.sp
+                        ),
+                        textAlign = TextAlign.End
+                    )
+                }
+
+                IconButton(onClick = { onCardClick() }) {
+                    Image(modifier = Modifier
+                        .weight(0.1f),painter = painterResource(id = R.drawable.close_icon), contentDescription ="")
+                }
+
+            }
+            SpacerHeight(10.dp)
+        }
+    }
+
+    @Composable
+    fun SpacerHeight(value: Dp) {
+        Spacer(modifier = Modifier.height(value))
+    }
+
+    @Composable
+    fun SpacerWidth(value: Dp) {
+        Spacer(modifier = Modifier.width(value))
+    }
+
     @Preview
     @Composable
-    fun PreviewUiElements() = CommentCard(
-        CommentModel(
-            image = R.drawable.user_photo,
-            name = "Prashant",
-            date = "12-01-2023",
-            comment = "JB"
-        )
-    )
+    fun PreviewUiElements() = CheckoutItemCard(){}
 }
 

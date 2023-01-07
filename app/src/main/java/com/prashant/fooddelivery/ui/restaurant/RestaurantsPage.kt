@@ -16,6 +16,7 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -59,7 +60,7 @@ fun RestaurantsPage(navController: NavController) {
             stars = 4.0f,
             comments = 312,
             sales = 412,
-            icon = R.drawable.img_wavos,
+            icon = R.drawable.wavos,
             isRestaurant = false
         ),
         RestaurantDishModel(
@@ -88,7 +89,7 @@ fun RestaurantsPage(navController: NavController) {
             stars = 4.0f,
             comments = 312,
             sales = 412,
-            icon = R.drawable.img_wavos,
+            icon = R.drawable.wavos,
             isRestaurant = false
         ),*/
         RestaurantDishModel(
@@ -122,6 +123,7 @@ fun RestaurantsPage(navController: NavController) {
     }
     val icon =
         if (isFavourite) painterResource(R.drawable.like_icon_fill) else painterResource(R.drawable.like_icon)
+
     with(UIElements()) {
         Column(
             verticalArrangement = Arrangement.Top,
@@ -237,7 +239,10 @@ fun RestaurantsPage(navController: NavController) {
                             )
                         )
                         Spacer(modifier = Modifier.height(5.dp))
-                        Column(modifier = Modifier
+                        Column(
+                            verticalArrangement = Arrangement.Top,
+                            horizontalAlignment = Alignment.End,
+                            modifier = Modifier
                             .animateContentSize(animationSpec = tween(100))
                             .clickable(
                                 interactionSource = remember { MutableInteractionSource() },
@@ -265,6 +270,12 @@ fun RestaurantsPage(navController: NavController) {
                                     overflow = TextOverflow.Ellipsis
                                 )
                             }
+
+                            Image(
+                                painter = painterResource(R.drawable.ic_back),
+                                contentDescription = "expand trigger",
+                                modifier = Modifier.rotate(if (showMore) 90f else -90f).padding(end = 10.dp)
+                            )
                         }
                     }
                 }

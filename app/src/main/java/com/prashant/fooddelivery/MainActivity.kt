@@ -104,6 +104,8 @@ private fun showBnm(navHostController: NavHostController): Boolean {
         Screens.Tracking.route -> true
         Screens.Checkout.route -> true
         Screens.Account.route -> true
+        Screens.ItemPage.route -> true
+        Screens.RestaurantsPage.route -> true
         else -> false
     }
 }

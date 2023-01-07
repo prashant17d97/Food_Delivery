@@ -45,7 +45,7 @@ fun ItemPage(navController: NavController) {
             stars = 4.0f,
             comments = 312,
             sales = 412,
-            icon = R.drawable.img_wavos,
+            icon = R.drawable.wavos,
             isRestaurant = false
         ),
         RestaurantDishModel(
@@ -158,7 +158,7 @@ fun ItemPage(navController: NavController) {
                     .padding(10.dp)
             ) {
                 Image(
-                    painter = painterResource(id = R.drawable.img_wavos_logo),
+                    painter = painterResource(id = R.drawable.wavos),
                     contentDescription = "",
                     modifier = Modifier.size(200.dp)
                 )
