@@ -1,7 +1,6 @@
 package com.prashant.fooddelivery.ui.checkout
 
 import android.annotation.SuppressLint
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -27,7 +26,6 @@ import com.prashant.fooddelivery.R
 import com.prashant.fooddelivery.uielement.UIElements
 
 @SuppressLint("UnrememberedMutableState")
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun Checkout(navController: NavController) {
     var isSwitchOn by rememberSaveable {
@@ -43,15 +41,15 @@ fun Checkout(navController: NavController) {
                 .padding(10.dp)
         ) {
             LazyColumn(userScrollEnabled = false, content = {
-                itemsIndexed(list) { index, item ->
+                itemsIndexed(list) { index, _ ->
                     CheckoutItemCard {
                         list.removeAt(index)
                     }
 
                 }
             })
-            SpacerHeight(value = 20.dp)
 
+            SpacerHeight(value = 20.dp)
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -174,7 +172,7 @@ fun Checkout(navController: NavController) {
             }
             SpacerHeight(value = 10.dp)
             Row(
-                horizontalArrangement = Arrangement.SpaceBetween,
+                horizontalArrangement = Arrangement.Start,
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -186,14 +184,14 @@ fun Checkout(navController: NavController) {
             ) {
                 Image(
                     painter = painterResource(id = R.drawable.place_icon),
-                    modifier = Modifier.size(20.dp),
+                    modifier = Modifier.size(20.dp).weight(0.05f),
                     contentDescription = "",
                     colorFilter = ColorFilter.tint(colorResource(id = R.color.text_color))
                 )
                 SpacerWidth(value = 10.dp)
                 Text(
                     modifier = Modifier
-                        .fillMaxWidth()
+                        .weight(0.6f)
                         .padding(end = 20.dp),
                     text = "Auto detection of geolocation",
                     style = MaterialTheme.typography.body2.copy(
@@ -207,32 +205,35 @@ fun Checkout(navController: NavController) {
                 Switch(
                     checked = isSwitchOn,
                     onCheckedChange = { isSwitchOn = !isSwitchOn },
-                    modifier = Modifier.padding(end = 10.dp)
+                    modifier = Modifier.padding(end = 10.dp).weight(0.1f)
                 )
             }
+/*
+            if(list.isNotEmpty()) {
+            }
+            else{
+                Column(
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.tray_icon),
+                        modifier = Modifier.size(120.dp),
+                        contentDescription = ""
+                    )
+                    UIElements().SpacerHeight(value = 20.dp)
+                    Text(
+                        text = "Your cart is empty",
+                        style = MaterialTheme.typography.body1.copy(fontWeight = FontWeight.Bold),
+                        fontSize = 20.sp
+                    )
+                }
+            }*/
 
         }
     }
 
-    /*AnimatedVisibility(visible = list.isEmpty()) {
-        Column(
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.fillMaxSize()
-        ) {
-            Image(
-                painter = painterResource(id = R.drawable.tray_icon),
-                modifier = Modifier.size(120.dp),
-                contentDescription = ""
-            )
-            UIElements().SpacerHeight(value = 20.dp)
-            Text(
-                text = "Your cart is empty",
-                style = MaterialTheme.typography.body1.copy(fontWeight = FontWeight.Bold),
-                fontSize = 20.sp
-            )
-        }
-    }*/
 
 
 }
