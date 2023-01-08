@@ -25,6 +25,8 @@
     <string name="welcome">Welcome,</string>
     <string name="comments">Comments</string>
     <string name="checkout">Checkout</string>
+    <string name="delivery_address">Delivery address</string>
+    <string name="cards">Cards</string>
     <string name="welcome_message">Food Delivery is your faithful assistant in the fight against hunger!</string>
 
 </resources>

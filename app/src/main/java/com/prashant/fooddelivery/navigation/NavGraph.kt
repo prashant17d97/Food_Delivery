@@ -7,7 +7,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.prashant.fooddelivery.ui.Account
+import com.prashant.fooddelivery.ui.account.Account
 import com.prashant.fooddelivery.ui.checkout.Checkout
 import com.prashant.fooddelivery.ui.ItemPage
 import com.prashant.fooddelivery.ui.Tracking
