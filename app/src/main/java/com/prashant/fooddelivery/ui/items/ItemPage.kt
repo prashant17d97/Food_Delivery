@@ -1,4 +1,4 @@
-package com.prashant.fooddelivery.ui
+package com.prashant.fooddelivery.ui.items
 
 import android.util.Log
 import androidx.compose.foundation.*

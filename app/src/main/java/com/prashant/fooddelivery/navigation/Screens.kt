@@ -33,11 +33,14 @@ const val welcome = "Welcome"
 const val home = "Home"
 const val tracking = "Tracking"
 const val checkout = "Checkout"
+const val orders = "Orders"
 const val account = "Account"
 const val search = "Search"
 const val restaurantsPage = "RestaurantsPage"
 const val itemPage = "ItemPage"
 const val savedDishNRestaurant = "SavedDishNRestaurant"
+const val feedBacks = "FeedBacks"
+const val transactions = "Transactions"
 
 sealed class Screens(var title: String, var icon: Int = 0, var route: String) {
 
@@ -47,13 +50,14 @@ sealed class Screens(var title: String, var icon: Int = 0, var route: String) {
             return "$home/$demo"
         }
     }*/
-    object Tracking : Screens(tracking, R.drawable.map_icon, route = "$tracking/{$comingFrom}"){
+    object Tracking : Screens(tracking, R.drawable.map_icon, route = "$tracking/{$comingFrom}") {
         fun going(comingFrom: String): String {
             return "$tracking/$comingFrom"
         }
     }
 
     object Checkout : Screens(checkout, R.drawable.checkout_icon, route = checkout)
+    object Orders : Screens(orders,  route = orders)
     object Account : Screens(account, R.drawable.user_icon, route = account)
     object Search : Screens(search, route = search)
 
@@ -93,4 +97,6 @@ sealed class Screens(var title: String, var icon: Int = 0, var route: String) {
             return "$welcome/$name"
         }
     }*/
+    object FeedBacks : Screens(title = feedBacks, route = feedBacks)
+    object Transactions : Screens(title = transactions, route = transactions)
 }

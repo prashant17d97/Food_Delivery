@@ -2,13 +2,8 @@ package com.prashant.fooddelivery.ui.checkout
 
 import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -42,7 +37,7 @@ fun Checkout(navController: NavController) {
         mutableStateOf(false) // Initially dialog is closed
     }
     val list = remember {
-        mutableStateListOf<String>("a", "a", "a", "a")
+        mutableStateListOf("a", "a", "a", "a", "a", "a")
     }
 
     if (list.isNotEmpty()) {
@@ -51,15 +46,13 @@ fun Checkout(navController: NavController) {
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(10.dp)
+                    .verticalScroll(rememberScrollState())
             ) {
-                LazyColumn(userScrollEnabled = false, content = {
-                    itemsIndexed(list) { index, _ ->
-                        CheckoutItemCard {
-                            list.removeAt(index)
-                        }
-
+                repeat(list.size) {
+                    CheckoutItemCard {
+                        list.removeAt(it)
                     }
-                })
+                }
 
                 SpacerHeight(value = 20.dp)
                 Column(
@@ -122,7 +115,7 @@ fun Checkout(navController: NavController) {
                 if (openDialog) {
                     PopUp(
                         dismiss = { /*openDialog = false*/ },
-                        openDialog = openDialog,
+                        openDialog = true,
                         onClick = {
                             openDialog = it
                             navController.navigate(Screens.Tracking.going(checkout)) {

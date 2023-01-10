@@ -8,18 +8,21 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.prashant.fooddelivery.ui.Account
-import com.prashant.fooddelivery.ui.ItemPage
-import com.prashant.fooddelivery.ui.SavedDishNRestaurant
-import com.prashant.fooddelivery.ui.Tracking
 import com.prashant.fooddelivery.ui.checkout.Checkout
 import com.prashant.fooddelivery.ui.forgot.ForgotPassword
 import com.prashant.fooddelivery.ui.home.Home
+import com.prashant.fooddelivery.ui.items.ItemPage
 import com.prashant.fooddelivery.ui.login.Login
+import com.prashant.fooddelivery.ui.orders.Orders
+import com.prashant.fooddelivery.ui.orders.feedbacks.FeedBacks
+import com.prashant.fooddelivery.ui.orders.transactions.Transactions
 import com.prashant.fooddelivery.ui.otp.OTP
 import com.prashant.fooddelivery.ui.registration.Registration
 import com.prashant.fooddelivery.ui.restaurant.RestaurantsPage
 import com.prashant.fooddelivery.ui.restpassword.ResetPassword
+import com.prashant.fooddelivery.ui.saved.SavedDishNRestaurant
 import com.prashant.fooddelivery.ui.search.Search
+import com.prashant.fooddelivery.ui.tracking.Tracking
 import com.prashant.fooddelivery.ui.welcome.Welcome
 
 
@@ -42,6 +45,15 @@ fun SetupNavGraph(navController: NavHostController) {
         }
         composable(route = Screens.Checkout.route) {
             Checkout(navController)
+        }
+        composable(route = Screens.Orders.route) {
+            Orders(navController)
+        }
+        composable(route = Screens.FeedBacks.route) {
+            FeedBacks(navController)
+        }
+        composable(route = Screens.Transactions.route) {
+            Transactions(navController)
         }
         composable(route = Screens.Account.route) {
             Account(navController)

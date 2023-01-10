@@ -29,9 +29,9 @@ import com.gowtham.ratingbar.RatingBar
 import com.gowtham.ratingbar.RatingBarConfig
 import com.gowtham.ratingbar.RatingBarStyle
 import com.prashant.fooddelivery.R
+import com.prashant.fooddelivery.enums.CellCounts
 import com.prashant.fooddelivery.models.RestaurantDishModel
 import com.prashant.fooddelivery.navigation.Screens
-import com.prashant.fooddelivery.uielement.CellCounts
 import com.prashant.fooddelivery.uielement.UIElements.Companion.uiElements
 import kotlinx.coroutines.launch
 
@@ -140,7 +140,7 @@ fun Search(navController: NavController) {
                     uiElements.RestaurantDishCard(
                         it,
                         isBottomRowRequire = true,
-                        isSpan = true,
+
                         onCardClick = {
                             navController.navigate(Screens.ItemPage.route)
                         })

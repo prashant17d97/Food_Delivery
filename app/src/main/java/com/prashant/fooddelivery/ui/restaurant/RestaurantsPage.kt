@@ -327,7 +327,7 @@ fun RestaurantsPage(navController: NavController) {
                         RestaurantDishCard(
                             menus[item],
                             isBottomRowRequire = true,
-                            isSpan = true,
+
                             onCardClick = {
                                 navController.navigate(Screens.ItemPage.route)
                             })
@@ -343,7 +343,7 @@ fun RestaurantsPage(navController: NavController) {
                         RestaurantDishCard(
                             menus[item],
                             isBottomRowRequire = true,
-                            isSpan = true,
+
                             onCardClick = {
                                 navController.navigate(Screens.ItemPage.route)
                             })
@@ -359,7 +359,7 @@ fun RestaurantsPage(navController: NavController) {
                         RestaurantDishCard(
                             menus[item],
                             isBottomRowRequire = true,
-                            isSpan = true,
+
                             onCardClick = {
                                 navController.navigate(Screens.ItemPage.route)
                             })

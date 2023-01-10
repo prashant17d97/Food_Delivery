@@ -28,10 +28,10 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.google.gson.Gson
 import com.prashant.fooddelivery.R
+import com.prashant.fooddelivery.enums.CellCounts
 import com.prashant.fooddelivery.models.CategoriesModel
 import com.prashant.fooddelivery.models.RestaurantDishModel
 import com.prashant.fooddelivery.navigation.Screens
-import com.prashant.fooddelivery.uielement.CellCounts
 import com.prashant.fooddelivery.uielement.UIElements.Companion.uiElements
 
 @Composable
@@ -217,7 +217,7 @@ fun Home(navController: NavController) {
                         RestaurantDishCard(
                             it,
                             isBottomRowRequire = true,
-                            isSpan = true,
+
                             onCardClick = {
                                 navController.navigate(Screens.ItemPage.route)
                             })

@@ -1,4 +1,4 @@
-package com.prashant.fooddelivery.ui
+package com.prashant.fooddelivery.ui.saved
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.*
@@ -127,7 +127,7 @@ fun SavedDishNRestaurant(navController: NavController) {
                     RestaurantDishCard(
                         it,
                         isBottomRowRequire = true,
-                        isSpan = true,
+
 
                         onCardClick = {
                             navController.navigate(Screens.ItemPage.route)
@@ -145,7 +145,7 @@ fun SavedDishNRestaurant(navController: NavController) {
                     RestaurantDishCard(
                         it,
                         isBottomRowRequire = false,
-                        isSpan = true,
+
                         onCardClick = {
                             navController.navigate(Screens.RestaurantsPage.route)
                         },
