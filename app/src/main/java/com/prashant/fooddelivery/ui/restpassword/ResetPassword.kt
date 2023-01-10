@@ -30,12 +30,12 @@ import androidx.navigation.compose.rememberNavController
 import com.prashant.fooddelivery.R
 import com.prashant.fooddelivery.enums.IsVisible
 import com.prashant.fooddelivery.navigation.Screens
-import com.prashant.fooddelivery.uielement.UIElements
+import com.prashant.fooddelivery.uielement.UIElements.Companion.uiElements
 
 @Composable
 fun ResetPassword(navController: NavController) {
     var newPassword by rememberSaveable { mutableStateOf("") }
-    with(UIElements()){
+    with(uiElements) {
         ImageBackground(
             painter = painterResource(id = R.drawable.password_bg),
             isBackVisible = IsVisible.VISIBLE,

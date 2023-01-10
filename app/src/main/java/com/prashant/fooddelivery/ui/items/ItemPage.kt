@@ -1,4 +1,4 @@
-package com.prashant.fooddelivery.ui
+package com.prashant.fooddelivery.ui.items
 
 import android.util.Log
 import androidx.compose.foundation.*
@@ -31,7 +31,7 @@ import com.gowtham.ratingbar.RatingBarStyle
 import com.prashant.fooddelivery.R
 import com.prashant.fooddelivery.models.RestaurantDishModel
 import com.prashant.fooddelivery.navigation.Screens
-import com.prashant.fooddelivery.uielement.UIElements
+import com.prashant.fooddelivery.uielement.UIElements.Companion.uiElements
 
 @Composable
 fun ItemPage(navController: NavController) {
@@ -69,7 +69,7 @@ fun ItemPage(navController: NavController) {
     )
     val icon =
         if (isFavourite) painterResource(R.drawable.like_icon_fill) else painterResource(R.drawable.like_icon)
-    with(UIElements()) {
+    with(uiElements) {
         Column(
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -326,6 +326,7 @@ fun ItemPage(navController: NavController) {
                 items(count = restaurants.size, itemContent = { index ->
                     RestaurantDishCard(
                         restaurants[index],
+                        paddingEnd = 10.dp,
                         isBottomRowRequire = true,
                         onCardClick = {
                             navController.navigate(Screens.ItemPage.route)

@@ -37,6 +37,7 @@ import com.prashant.fooddelivery.models.RestaurantDishModel
 import com.prashant.fooddelivery.navigation.Screens
 import com.prashant.fooddelivery.navigation.restaurantPageArgs
 import com.prashant.fooddelivery.uielement.UIElements
+import com.prashant.fooddelivery.uielement.UIElements.Companion.uiElements
 
 @Composable
 fun RestaurantsPage(navController: NavController) {
@@ -124,7 +125,7 @@ fun RestaurantsPage(navController: NavController) {
     val icon =
         if (isFavourite) painterResource(R.drawable.like_icon_fill) else painterResource(R.drawable.like_icon)
 
-    with(UIElements()) {
+    with(uiElements) {
         Column(
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -326,7 +327,7 @@ fun RestaurantsPage(navController: NavController) {
                         RestaurantDishCard(
                             menus[item],
                             isBottomRowRequire = true,
-                            isSpan = true,
+
                             onCardClick = {
                                 navController.navigate(Screens.ItemPage.route)
                             })
@@ -342,7 +343,7 @@ fun RestaurantsPage(navController: NavController) {
                         RestaurantDishCard(
                             menus[item],
                             isBottomRowRequire = true,
-                            isSpan = true,
+
                             onCardClick = {
                                 navController.navigate(Screens.ItemPage.route)
                             })
@@ -358,7 +359,7 @@ fun RestaurantsPage(navController: NavController) {
                         RestaurantDishCard(
                             menus[item],
                             isBottomRowRequire = true,
-                            isSpan = true,
+
                             onCardClick = {
                                 navController.navigate(Screens.ItemPage.route)
                             })

@@ -28,14 +28,14 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.prashant.fooddelivery.R
 import com.prashant.fooddelivery.enums.IsVisible
-import com.prashant.fooddelivery.navigation.RestPassword
+import com.prashant.fooddelivery.navigation.restPassword
 import com.prashant.fooddelivery.navigation.Screens
-import com.prashant.fooddelivery.uielement.UIElements
+import com.prashant.fooddelivery.uielement.UIElements.Companion.uiElements
 
 @Composable
 fun ForgotPassword(navController: NavController) {
     var phone by rememberSaveable { mutableStateOf("") }
-    with(UIElements()) {
+    with(uiElements) {
         ImageBackground(
             painter = painterResource(id = R.drawable.forgot_password),
             isBackVisible = IsVisible.VISIBLE,
@@ -86,7 +86,7 @@ fun ForgotPassword(navController: NavController) {
             GradientButtonNoRipple(
                 textOnButton = stringResource(id = R.string.send),
                 onClick = {
-                    navController.navigate(Screens.OTP.requireArguments(RestPassword,"")) {
+                    navController.navigate(Screens.OTP.requireArguments(restPassword,"")) {
                         this.popUpTo(Screens.ForgotPassword.route) {
                             this.inclusive = true
                         }

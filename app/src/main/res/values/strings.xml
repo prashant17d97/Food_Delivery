@@ -25,6 +25,8 @@
     <string name="welcome">Welcome,</string>
     <string name="comments">Comments</string>
     <string name="checkout">Checkout</string>
+    <string name="trace">Trace the order on the map</string>
+    <string name="leave_feedback">Leave feedback</string>
     <string name="delivery_address">Delivery address</string>
     <string name="cards">Cards</string>
     <string name="welcome_message">Food Delivery is your faithful assistant in the fight against hunger!</string>

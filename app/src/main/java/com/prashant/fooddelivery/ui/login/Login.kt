@@ -29,6 +29,7 @@ import androidx.navigation.compose.rememberNavController
 import com.prashant.fooddelivery.R
 import com.prashant.fooddelivery.navigation.Screens
 import com.prashant.fooddelivery.uielement.UIElements
+import com.prashant.fooddelivery.uielement.UIElements.Companion.uiElements
 
 @Composable
 fun Login(navController: NavController) {
@@ -39,7 +40,7 @@ fun Login(navController: NavController) {
     BackHandler {
         activity?.finishAffinity()
     }
-    with(UIElements()) {
+    with(uiElements) {
         ImageBackground(painter = painterResource(R.drawable.login_pasta), backClick = {}) {
             Text(
                 modifier = Modifier.fillMaxWidth(),
