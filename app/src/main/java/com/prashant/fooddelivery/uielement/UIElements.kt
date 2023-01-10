@@ -1,5 +1,6 @@
 package com.prashant.fooddelivery.uielement
 
+import android.content.Context
 import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.*
@@ -20,9 +21,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.*
+import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.*
@@ -1053,8 +1056,12 @@ class UIElements {
                 }
 
                 IconButton(onClick = { onCardClick() }) {
-                    Image(modifier = Modifier
-                        .weight(0.1f),painter = painterResource(id = R.drawable.close_icon), contentDescription ="")
+                    Image(
+                        modifier = Modifier
+                            .weight(0.1f),
+                        painter = painterResource(id = R.drawable.close_icon),
+                        contentDescription = ""
+                    )
                 }
 
             }
@@ -1072,8 +1079,68 @@ class UIElements {
         Spacer(modifier = Modifier.width(value))
     }
 
+    @Composable
+    fun CustomSwitch(
+        width: Int = 40,
+        height: Int = (width * 0.4).toInt(),
+        activeColor: Color = colorResource(R.color.text_color),
+        inActiveColor: Color = colorResource(R.color.text_color),
+        checked: Boolean = true,
+        onCheckedChange: (Boolean) -> Unit
+    ) {
+        val padding: Int = (height / 2).toInt()
+        val dotSize = (height * 0.75).toFloat()
+        val context = LocalContext.current
+        val color = if (checked) activeColor else inActiveColor
+        Row(
+            horizontalArrangement = if (checked) Arrangement.End else Arrangement.Start,
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .size(width = width.dp, height = height.dp)
+                .border(BorderStroke(2.dp, color = color), shape = CircleShape)
+                .padding(padding.dp)
+                .clickable {
+                    onCheckedChange(!checked)
+
+                }
+        ) {
+            Canvas(modifier = Modifier, onDraw = {
+                drawCircle(
+                    color = color,
+                    radius = dotSize,
+                    style = Fill,
+                )
+            })
+        }
+    }
+
+    private fun dpToPx(context: Context, dpValue: Float): Float {
+        return dpValue * context.resources.displayMetrics.density
+    }
+
     @Preview
     @Composable
-    fun PreviewUiElements() = CheckoutItemCard(){}
+    fun PreviewUiElements() {
+        var isSelected by rememberSaveable {
+            mutableStateOf(false)
+        }
+        CustomSwitch(activeColor = colorResource(R.color.text_color), inActiveColor = colorResource(R.color.text_color),
+            checked = isSelected,
+            onCheckedChange = {
+                isSelected = it
+                Log.e("TAG", "CustomSwitch: $it")
+            })
+    }
 }
 
+/*
+                .swipeable(
+                    state = swappableState,
+                    anchors = mapOf(
+                        0f to 0,
+                        -dpToPx(context, dpValue = 100f) to 1,
+                        dpToPx(context, dpValue = 50f) to 2,
+                    ),
+                    thresholds = { i, j -> FractionalThreshold(0.3f) },
+                    orientation = Orientation.Horizontal
+                )*/
