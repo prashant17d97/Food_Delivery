@@ -1,11 +1,12 @@
 package com.prashant.fooddelivery.uielement
 
-import android.content.Context
+import android.content.res.Configuration
 import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.*
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -25,6 +26,7 @@ import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -49,11 +51,15 @@ import com.prashant.fooddelivery.models.CommentModel
 import com.prashant.fooddelivery.models.RestaurantDishModel
 import com.prashant.fooddelivery.models.SuggestionModel
 
-
+@OptIn(ExperimentalComposeUiApi::class)
 class UIElements {
     val pattern = Regex("^\\d+\$")
 
-    @OptIn(ExperimentalComposeUiApi::class)
+    companion object {
+        val uiElements = UIElements()
+    }
+
+
     @Composable
     fun CustomPasswordTextField(
         password: String,
@@ -139,7 +145,6 @@ class UIElements {
     /**
      * [CustomTextField]
      * */
-    @OptIn(ExperimentalComposeUiApi::class)
     @Composable
     fun CustomTextField(
         phone: String,
@@ -363,7 +368,6 @@ class UIElements {
 
     }
 
-    @OptIn(ExperimentalComposeUiApi::class)
     @Composable
     fun DynamicOTP(size: Int, otp: (String, Int) -> Unit) {
         val focusManager = LocalFocusManager.current
@@ -482,7 +486,7 @@ class UIElements {
 
     }
 
-    @OptIn(ExperimentalComposeUiApi::class)
+
     @Composable
     fun SearchCard(
         value: String,
@@ -751,7 +755,7 @@ class UIElements {
                 )
                 Text(
                     text = categoryModel.categoriesName,
-                    style = MaterialTheme.typography.body1.copy(color = colorResource(id = R.color.text_color))
+                    style = MaterialTheme.typography.body1.copy(color = colorResource(id = R.color.text_color), fontSize = 12.sp)
                 )
             }
 
@@ -763,6 +767,7 @@ class UIElements {
         restaurantDishModel: RestaurantDishModel,
         isBottomRowRequire: Boolean,
         isSpan: Boolean = false,
+        paddingEnd: Dp = 0.dp,
         onCardClick: () -> Unit = {}
     ) {
         Card(
@@ -770,17 +775,7 @@ class UIElements {
             modifier = Modifier
                 .clickable { onCardClick() }
                 .width(180.dp)
-                .padding(
-                    end = if (restaurantDishModel.isRestaurant) {
-                        10.dp
-                    } else {
-                        if (isBottomRowRequire && !isSpan) {
-                            10.dp
-                        } else {
-                            0.dp
-                        }
-                    }, bottom = 10.dp
-                ),
+                .padding(end = paddingEnd, bottom = 10.dp),
             backgroundColor = colorResource(id = R.color.card_bg)
         ) {
             Column(
@@ -1069,20 +1064,42 @@ class UIElements {
         }
     }
 
+    /**
+     * [SpacerHeight] is used to give height.
+     * @param value requires for the height.
+     * */
     @Composable
     fun SpacerHeight(value: Dp) {
         Spacer(modifier = Modifier.height(value))
     }
 
+    /**
+     * [SpacerWidth] is used to give width.
+     * @param value requires for the width.
+     * */
     @Composable
     fun SpacerWidth(value: Dp) {
         Spacer(modifier = Modifier.width(value))
     }
 
+
+    /**
+     * [CustomSwitch] is completely custom which requires the following params.
+     * @param width
+     * @param height it is optional and it is better not assign value for it coz,
+     * it calculate best value from width.
+     * @param activeColor this parameter is used for assign color for active mode switch
+     * @param inActiveColor this parameter is used for assign color for inActive mode switch
+     * @param checked this parameter is for initial value
+     * @param onCheckedChange this parameter is change the state of switch on-off-on.
+     * @author Prashant Kumar Singh
+     * @since 2023
+     * @return It returns switch scope with it boolean state.
+     * */
     @Composable
     fun CustomSwitch(
         width: Int = 40,
-        height: Int = (width * 0.4).toInt(),
+        height: Int = (width * 0.5).toInt(),
         activeColor: Color = colorResource(R.color.text_color),
         inActiveColor: Color = colorResource(R.color.text_color),
         checked: Boolean = true,
@@ -1114,23 +1131,405 @@ class UIElements {
         }
     }
 
-    private fun dpToPx(context: Context, dpValue: Float): Float {
+    /*private fun dpToPx(context: Context, dpValue: Float): Float {
         return dpValue * context.resources.displayMetrics.density
+    }*/
+
+
+    @Composable
+    fun <Generic> VerticalGridCells(
+        modifier: Modifier = Modifier,
+        spanCount: CellCounts = CellCounts.TWO,
+        list: List<Generic>,
+        itemScope: @Composable (Generic) -> Unit
+    ) {
+        val listSize = list.size
+        var index = 0
+        val configuration = LocalConfiguration.current
+        val span =
+            if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT) spanCount.int else spanCount.int * 2
+        val totalRow =
+            if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT) (listSize + 1) / span else ((listSize + 1) / span) + 1
+
+        Column(
+            verticalArrangement = Arrangement.Top,
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = modifier
+        ) {
+            Log.e("TAG", "GridCells: $listSize **** $totalRow")
+            for (row in 1..totalRow) {
+                LazyRow(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    content = {
+                        items(count = span, itemContent = {
+                            if (index < listSize) {
+                                itemScope(list[index])
+                            }
+                            index++
+                        }
+                        )
+                    })
+            }
+        }
     }
+
 
     @Preview
     @Composable
-    fun PreviewUiElements() {
-        var isSelected by rememberSaveable {
-            mutableStateOf(false)
-        }
-        CustomSwitch(activeColor = colorResource(R.color.text_color), inActiveColor = colorResource(R.color.text_color),
-            checked = isSelected,
-            onCheckedChange = {
-                isSelected = it
-                Log.e("TAG", "CustomSwitch: $it")
-            })
-    }
+    fun PreviewUIElement() = VerticalGridCells(
+        spanCount = CellCounts.TWO,
+        list = listOf(
+            RestaurantDishModel(
+                restaurantName = "Homemade Pizza\nPepperoni",
+                restaurantOffers = "",
+                stars = 4.0f,
+                comments = 261,
+                sales = 1367,
+                icon = R.drawable.pepperoni_pizza,
+                isRestaurant = false
+            ),
+            RestaurantDishModel(
+                restaurantName = "Philadelphia rolls\nwith salmon",
+                restaurantOffers = "",
+                stars = 4.0f,
+                comments = 285,
+                sales = 1286,
+                icon = R.drawable.salmon,
+                isRestaurant = false
+            ),
+            RestaurantDishModel(
+                restaurantName = "A",
+                restaurantOffers = "",
+                stars = 4.0f,
+                comments = 285,
+                sales = 1286,
+                icon = R.drawable.salmon,
+                isRestaurant = false
+            ),
+            RestaurantDishModel(
+                restaurantName = "B",
+                restaurantOffers = "",
+                stars = 4.0f,
+                comments = 285,
+                sales = 1286,
+                icon = R.drawable.salmon,
+                isRestaurant = false
+            ),
+            RestaurantDishModel(
+                restaurantName = "C",
+                restaurantOffers = "",
+                stars = 4.0f,
+                comments = 285,
+                sales = 1286,
+                icon = R.drawable.salmon,
+                isRestaurant = false
+            ),
+            RestaurantDishModel(
+                restaurantName = "D",
+                restaurantOffers = "",
+                stars = 4.0f,
+                comments = 285,
+                sales = 1286,
+                icon = R.drawable.salmon,
+                isRestaurant = false
+            ),
+            RestaurantDishModel(
+                restaurantName = "C",
+                restaurantOffers = "",
+                stars = 4.0f,
+                comments = 285,
+                sales = 1286,
+                icon = R.drawable.salmon,
+                isRestaurant = false
+            ),
+            RestaurantDishModel(
+                restaurantName = "D",
+                restaurantOffers = "",
+                stars = 4.0f,
+                comments = 285,
+                sales = 1286,
+                icon = R.drawable.salmon,
+                isRestaurant = false
+            ),
+            RestaurantDishModel(
+                restaurantName = "C",
+                restaurantOffers = "",
+                stars = 4.0f,
+                comments = 285,
+                sales = 1286,
+                icon = R.drawable.salmon,
+                isRestaurant = false
+            ),
+            RestaurantDishModel(
+                restaurantName = "D",
+                restaurantOffers = "",
+                stars = 4.0f,
+                comments = 285,
+                sales = 1286,
+                icon = R.drawable.salmon,
+                isRestaurant = false
+            ),
+            RestaurantDishModel(
+                restaurantName = "C",
+                restaurantOffers = "",
+                stars = 4.0f,
+                comments = 285,
+                sales = 1286,
+                icon = R.drawable.salmon,
+                isRestaurant = false
+            ),
+            RestaurantDishModel(
+                restaurantName = "D",
+                restaurantOffers = "",
+                stars = 4.0f,
+                comments = 285,
+                sales = 1286,
+                icon = R.drawable.salmon,
+                isRestaurant = false
+            ),
+            RestaurantDishModel(
+                restaurantName = "C",
+                restaurantOffers = "",
+                stars = 4.0f,
+                comments = 285,
+                sales = 1286,
+                icon = R.drawable.salmon,
+                isRestaurant = false
+            ),
+            RestaurantDishModel(
+                restaurantName = "D",
+                restaurantOffers = "",
+                stars = 4.0f,
+                comments = 285,
+                sales = 1286,
+                icon = R.drawable.salmon,
+                isRestaurant = false
+            ),
+            RestaurantDishModel(
+                restaurantName = "C",
+                restaurantOffers = "",
+                stars = 4.0f,
+                comments = 285,
+                sales = 1286,
+                icon = R.drawable.salmon,
+                isRestaurant = false
+            ),
+            RestaurantDishModel(
+                restaurantName = "D",
+                restaurantOffers = "",
+                stars = 4.0f,
+                comments = 285,
+                sales = 1286,
+                icon = R.drawable.salmon,
+                isRestaurant = false
+            ),
+            RestaurantDishModel(
+                restaurantName = "C",
+                restaurantOffers = "",
+                stars = 4.0f,
+                comments = 285,
+                sales = 1286,
+                icon = R.drawable.salmon,
+                isRestaurant = false
+            ),
+            RestaurantDishModel(
+                restaurantName = "D",
+                restaurantOffers = "",
+                stars = 4.0f,
+                comments = 285,
+                sales = 1286,
+                icon = R.drawable.salmon,
+                isRestaurant = false
+            ),
+            RestaurantDishModel(
+                restaurantName = "C",
+                restaurantOffers = "",
+                stars = 4.0f,
+                comments = 285,
+                sales = 1286,
+                icon = R.drawable.salmon,
+                isRestaurant = false
+            ),
+            RestaurantDishModel(
+                restaurantName = "D",
+                restaurantOffers = "",
+                stars = 4.0f,
+                comments = 285,
+                sales = 1286,
+                icon = R.drawable.salmon,
+                isRestaurant = false
+            ),
+            RestaurantDishModel(
+                restaurantName = "C",
+                restaurantOffers = "",
+                stars = 4.0f,
+                comments = 285,
+                sales = 1286,
+                icon = R.drawable.salmon,
+                isRestaurant = false
+            ),
+            RestaurantDishModel(
+                restaurantName = "D",
+                restaurantOffers = "",
+                stars = 4.0f,
+                comments = 285,
+                sales = 1286,
+                icon = R.drawable.salmon,
+                isRestaurant = false
+            ),
+            RestaurantDishModel(
+                restaurantName = "C",
+                restaurantOffers = "",
+                stars = 4.0f,
+                comments = 285,
+                sales = 1286,
+                icon = R.drawable.salmon,
+                isRestaurant = false
+            ),
+            RestaurantDishModel(
+                restaurantName = "D",
+                restaurantOffers = "",
+                stars = 4.0f,
+                comments = 285,
+                sales = 1286,
+                icon = R.drawable.salmon,
+                isRestaurant = false
+            ),
+            RestaurantDishModel(
+                restaurantName = "C",
+                restaurantOffers = "",
+                stars = 4.0f,
+                comments = 285,
+                sales = 1286,
+                icon = R.drawable.salmon,
+                isRestaurant = false
+            ),
+            RestaurantDishModel(
+                restaurantName = "D",
+                restaurantOffers = "",
+                stars = 4.0f,
+                comments = 285,
+                sales = 1286,
+                icon = R.drawable.salmon,
+                isRestaurant = false
+            ),
+            RestaurantDishModel(
+                restaurantName = "C",
+                restaurantOffers = "",
+                stars = 4.0f,
+                comments = 285,
+                sales = 1286,
+                icon = R.drawable.salmon,
+                isRestaurant = false
+            ),
+            RestaurantDishModel(
+                restaurantName = "D",
+                restaurantOffers = "",
+                stars = 4.0f,
+                comments = 285,
+                sales = 1286,
+                icon = R.drawable.salmon,
+                isRestaurant = false
+            ),
+            RestaurantDishModel(
+                restaurantName = "C",
+                restaurantOffers = "",
+                stars = 4.0f,
+                comments = 285,
+                sales = 1286,
+                icon = R.drawable.salmon,
+                isRestaurant = false
+            ),
+            RestaurantDishModel(
+                restaurantName = "D",
+                restaurantOffers = "",
+                stars = 4.0f,
+                comments = 285,
+                sales = 1286,
+                icon = R.drawable.salmon,
+                isRestaurant = false
+            ),
+            RestaurantDishModel(
+                restaurantName = "C",
+                restaurantOffers = "",
+                stars = 4.0f,
+                comments = 285,
+                sales = 1286,
+                icon = R.drawable.salmon,
+                isRestaurant = false
+            ),
+            RestaurantDishModel(
+                restaurantName = "D",
+                restaurantOffers = "",
+                stars = 4.0f,
+                comments = 285,
+                sales = 1286,
+                icon = R.drawable.salmon,
+                isRestaurant = false
+            ),
+            RestaurantDishModel(
+                restaurantName = "C",
+                restaurantOffers = "",
+                stars = 4.0f,
+                comments = 285,
+                sales = 1286,
+                icon = R.drawable.salmon,
+                isRestaurant = false
+            ),
+            RestaurantDishModel(
+                restaurantName = "D",
+                restaurantOffers = "",
+                stars = 4.0f,
+                comments = 285,
+                sales = 1286,
+                icon = R.drawable.salmon,
+                isRestaurant = false
+            ),
+            RestaurantDishModel(
+                restaurantName = "C",
+                restaurantOffers = "",
+                stars = 4.0f,
+                comments = 285,
+                sales = 1286,
+                icon = R.drawable.salmon,
+                isRestaurant = false
+            ),
+            RestaurantDishModel(
+                restaurantName = "D",
+                restaurantOffers = "",
+                stars = 4.0f,
+                comments = 285,
+                sales = 1286,
+                icon = R.drawable.salmon,
+                isRestaurant = false
+            ),
+            RestaurantDishModel(
+                restaurantName = "E",
+                restaurantOffers = "",
+                stars = 4.0f,
+                comments = 285,
+                sales = 1286,
+                icon = R.drawable.salmon,
+                isRestaurant = false
+            )
+        ),
+        itemScope = {
+            RestaurantDishCard(
+                restaurantDishModel = it,
+                isBottomRowRequire = true
+            )
+        })
+}
+
+
+enum class CellCounts(val int: Int) {
+    TWO(2),
+    THREE(3),
+    Four(4),
+    Five(4),
+    Six(4),
 }
 
 /*

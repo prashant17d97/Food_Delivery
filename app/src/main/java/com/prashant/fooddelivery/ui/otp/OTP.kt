@@ -21,11 +21,11 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.prashant.fooddelivery.R
 import com.prashant.fooddelivery.enums.IsVisible
-import com.prashant.fooddelivery.navigation.RestPassword
+import com.prashant.fooddelivery.navigation.restPassword
 import com.prashant.fooddelivery.navigation.Screens
 import com.prashant.fooddelivery.navigation.comingFrom
 import com.prashant.fooddelivery.navigation.name
-import com.prashant.fooddelivery.uielement.UIElements
+import com.prashant.fooddelivery.uielement.UIElements.Companion.uiElements
 
 @Composable
 fun OTP(navController: NavController) {
@@ -34,7 +34,7 @@ fun OTP(navController: NavController) {
     val name =
         (navController.currentBackStackEntry?.arguments?.getString(name))?.removeSuffix("}")?: ""
     Log.e("TAG", "OTP: $from,$name")
-    with(UIElements()) {
+    with(uiElements) {
         ImageBackground(
             painter = painterResource(id = R.drawable.otp_food),
             isBackVisible = IsVisible.VISIBLE,
@@ -70,7 +70,7 @@ fun OTP(navController: NavController) {
             GradientButtonNoRipple(
                 textOnButton = stringResource(id = R.string.verify),
                 onClick = {
-                    val route = if (from==RestPassword) {
+                    val route = if (from==restPassword) {
                         Screens.ResetPassword.route
                     } else {
                         Screens.Welcome.nameArgs(name)

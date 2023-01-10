@@ -32,9 +32,9 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.prashant.fooddelivery.R
 import com.prashant.fooddelivery.methods.CommonMethod.toast
-import com.prashant.fooddelivery.navigation.RegistrationScreen
+import com.prashant.fooddelivery.navigation.registrationScreen
 import com.prashant.fooddelivery.navigation.Screens
-import com.prashant.fooddelivery.uielement.UIElements
+import com.prashant.fooddelivery.uielement.UIElements.Companion.uiElements
 
 @Composable
 fun Registration(navController: NavController) {
@@ -43,7 +43,7 @@ fun Registration(navController: NavController) {
     var password by rememberSaveable { mutableStateOf("") }
     var confirmPassword by rememberSaveable { mutableStateOf("") }
 
-    with(UIElements()) {
+    with(uiElements) {
         ImageBackground(
             painter = painterResource(R.drawable.registration_pizza),
             columnTopPadding = 0.dp,
@@ -127,7 +127,7 @@ fun Registration(navController: NavController) {
                     ) {
                         navController.navigate(
                             Screens.OTP.requireArguments(
-                                RegistrationScreen,
+                                registrationScreen,
                                 name
                             )
                         ) {
