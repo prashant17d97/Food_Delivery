@@ -188,7 +188,7 @@ fun Home(navController: NavController) {
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     items(count = restaurants.size, itemContent = { index ->
-                        RestaurantDishCard(restaurants[index], paddingEnd = 10.dp, onCardClick = {
+                        RestaurantDishCard(restaurants[index], paddingEnd = if (index == restaurants.size - 1) 0.dp else 10.dp, onCardClick = {
                             navController.navigate(
                                 Screens.RestaurantsPage.restaurantPageRequireArgs(
                                     Gson().toJson(restaurants[index])
@@ -217,7 +217,6 @@ fun Home(navController: NavController) {
                         RestaurantDishCard(
                             it,
                             isBottomRowRequire = true,
-
                             onCardClick = {
                                 navController.navigate(Screens.ItemPage.route)
                             })

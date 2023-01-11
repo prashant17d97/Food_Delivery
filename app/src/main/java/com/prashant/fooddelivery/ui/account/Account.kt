@@ -29,6 +29,9 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.prashant.fooddelivery.R
+import com.prashant.fooddelivery.navigation.Screens
+import com.prashant.fooddelivery.navigation.savedDishes
+import com.prashant.fooddelivery.navigation.savedRestaurants
 import com.prashant.fooddelivery.uielement.UIElements
 
 @Composable
@@ -105,20 +108,70 @@ fun Account(navController: NavController) {
             )
 
             AnimatedVisibility(visible = !isEditable) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween,
+                Column(
+                    verticalArrangement = Arrangement.Top,
+                    horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    SquareCard(
-                        icon = R.drawable.like_icon,
-                        text = "Saved \nDishes"
-                    )
-                    SquareCard(
-                        icon = R.drawable.restaurants_icon,
-                        text = "Saved \nRestaurants"
-                    )
+                    Row(
+                        verticalAlignment = Alignment.Top,
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        SquareCard(
+                            icon = R.drawable.like_icon,
+                            text = "Saved \nDishes"
+                        ) {
+                            navController.navigate(
+                                Screens.SavedDishNRestaurant.nameArgs(
+                                    savedDishes
+                                )
+                            )
+                        }
+                        SquareCard(
+                            icon = R.drawable.restaurants_icon,
+                            text = "Saved \nRestaurants"
+                        ) {
+                            navController.navigate(
+                                Screens.SavedDishNRestaurant.nameArgs(
+                                    savedRestaurants
+                                )
+                            )
+                        }
+
+                    }
+                    SpacerHeight(value = 10.dp)
+                    Row(
+                        horizontalArrangement = Arrangement.Start,
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier
+                            .clickable { navController.navigate(Screens.Orders.route) }
+                            .fillMaxWidth()
+                            .background(
+                                color = colorResource(id = R.color.card_bg),
+                                shape = MaterialTheme.shapes.medium
+                            )
+                            .padding(horizontal = 20.dp, vertical = 10.dp)
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.tray_icon),
+                            modifier = Modifier.size(20.dp),
+                            contentDescription = "",
+                            colorFilter = ColorFilter.tint(colorResource(id = R.color.text_color))
+                        )
+                        SpacerWidth(value = 10.dp)
+                        Text(
+                            text = "My Orders",
+                            style = MaterialTheme.typography.body2.copy(
+                                color = colorResource(
+                                    id = R.color.text_color
+                                ), fontSize = 12.sp
+                            )
+                        )
+                    }
                 }
+
+
             }
             SpacerHeight(value = 15.dp)
             Text(
@@ -208,7 +261,8 @@ fun AccountView() = Account(
 @Composable
 fun SquareCard(
     icon: Int,
-    text: String
+    text: String,
+    onclick: () -> Unit
 ) {
     val configuration = LocalConfiguration.current
 
@@ -216,6 +270,9 @@ fun SquareCard(
     Log.e("TAG", "Account: ${cardSize},${configuration.screenWidthDp}")
     Column(
         modifier = Modifier
+            .clickable {
+                onclick()
+            }
             .size(cardSize)
             .background(
                 color = colorResource(id = R.color.card_bg),
@@ -232,7 +289,7 @@ fun SquareCard(
         )
         UIElements().SpacerHeight(value = 20.dp)
         Text(
-            text = "Saved Dishes",
+            text = text,
             style = MaterialTheme.typography.body1,
             color = colorResource(id = R.color.text_color)
         )
