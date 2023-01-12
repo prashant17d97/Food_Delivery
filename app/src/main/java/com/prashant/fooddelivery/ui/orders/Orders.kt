@@ -16,6 +16,7 @@ import androidx.navigation.compose.rememberNavController
 import com.prashant.fooddelivery.R
 import com.prashant.fooddelivery.models.RestaurantDishModel
 import com.prashant.fooddelivery.navigation.Screens
+import com.prashant.fooddelivery.navigation.orders
 import com.prashant.fooddelivery.uielement.UIElements.Companion.uiElements
 
 @Composable
@@ -69,7 +70,7 @@ fun Orders(navController: NavController) {
                     )
                 ), isOnGoing = it == 0, onClick = {bool->
                     val route = if (bool) {
-                        Screens.Tracking.route
+                        Screens.Tracking.going(orders)
                     } else {
                         Screens.FeedBacks.route
                     }

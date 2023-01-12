@@ -67,6 +67,7 @@ fun Account(navController: NavController) {
     var country by rememberSaveable {
         mutableStateOf("")
     }
+    var originalName = name
 
     val editIcon = if (isEditable) R.drawable.ic_setting_edit else R.drawable.ic_setting
     with(UIElements()) {
@@ -119,6 +120,7 @@ fun Account(navController: NavController) {
                     modifier = Modifier.clickable {
                         isEditable = !isEditable
                         isAddressEditable = false
+                        originalName = name
                     })
             }
             SpacerHeight(value = 20.dp)
@@ -529,7 +531,8 @@ private fun SquareCard(
         Text(
             text = text,
             style = MaterialTheme.typography.body1,
-            color = colorResource(id = R.color.text_color)
+            color = colorResource(id = R.color.text_color),
+            textAlign = TextAlign.Center
         )
 
     }

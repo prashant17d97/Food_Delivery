@@ -1,7 +1,6 @@
 package com.prashant.fooddelivery.ui.tracking
 
 import android.util.Log
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -20,15 +19,15 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.prashant.fooddelivery.R
-import com.prashant.fooddelivery.navigation.Screens
 import com.prashant.fooddelivery.navigation.checkout
 import com.prashant.fooddelivery.navigation.comingFrom
+import com.prashant.fooddelivery.navigation.orders
 import com.prashant.fooddelivery.uielement.UIElements.Companion.uiElements
 
 @Composable
 fun Tracking(navController: NavController) {
     val from = navController.currentBackStackEntry?.arguments?.getString(comingFrom)
-    if (from != checkout) {
+    /*if (from != checkout && from != orders) {
         BackHandler {
             navController.navigate(Screens.Home.route) {
                 popUpTo(Screens.Tracking.route) {
@@ -36,9 +35,9 @@ fun Tracking(navController: NavController) {
                 }
             }
         }
-    }
+    }*/
     Log.e("TAG", "Tracking: $from")
-    if (from == checkout) {
+    if (from == checkout || from == orders) {
         ConstraintLayout(
             modifier = Modifier.fillMaxSize()
         ) {
