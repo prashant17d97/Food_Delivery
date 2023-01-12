@@ -49,7 +49,6 @@ fun Account(navController: NavController) {
     var isActive by rememberSaveable {
         mutableStateOf(false)
     }
-
     var completeAddress by rememberSaveable {
         mutableStateOf("Your Address")
     }
@@ -91,7 +90,7 @@ fun Account(navController: NavController) {
                         id = R.drawable.ic_comment
                     ),
                     contentDescription = "",
-                    colorFilter = ColorFilter.tint(color = colorResource(id = R.color.app_bg))
+                    colorFilter = ColorFilter.tint(color = Color.Transparent)
                 )
                 ConstraintLayout {
                     val (image, uploadButton) = createRefs()
@@ -115,25 +114,35 @@ fun Account(navController: NavController) {
                             })
                     }
                 }
-                Image(
-                    painter = painterResource(id = editIcon), contentDescription = "",
+                Image(painter = painterResource(id = editIcon),
+                    contentDescription = "",
                     modifier = Modifier.clickable {
                         isEditable = !isEditable
                         isAddressEditable = false
-                    }
-                )
+                    })
             }
             SpacerHeight(value = 20.dp)
-            TextField(
-                value = name, onValueChange = { name = it },
+            OutlinedTextField(
+                value = name,
+                onValueChange = { name = it },
                 enabled = isEditable,
                 textStyle = MaterialTheme.typography.body1.copy(textAlign = TextAlign.Center),
                 colors = TextFieldDefaults.textFieldColors(
                     backgroundColor = Color.Transparent,
-                    focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent,
-                    disabledIndicatorColor = Color.Transparent
-                ),
+                    focusedIndicatorColor = if (isEditable) MaterialTheme.colors.primaryVariant else Color.Transparent,
+                    unfocusedIndicatorColor = if (isEditable) MaterialTheme.colors.primaryVariant else Color.Transparent,
+                    disabledIndicatorColor = if (isEditable) MaterialTheme.colors.primaryVariant else Color.Transparent
+                )/*,
+                trailingIcon = {
+                    if (isEditable){
+                        Image(
+                            painter = painterResource(id = R.drawable.check_icon),
+                            contentDescription = "",
+                            colorFilter = ColorFilter.tint(MaterialTheme.colors.primaryVariant),
+                            modifier = Modifier.size(20.dp).clickable {  }
+                        )
+                    }
+                }*/
             )
 
             AnimatedVisibility(visible = !isEditable) {
@@ -148,8 +157,7 @@ fun Account(navController: NavController) {
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         SquareCard(
-                            icon = R.drawable.like_icon,
-                            text = "Saved \nDishes"
+                            icon = R.drawable.like_icon, text = "Saved \nDishes"
                         ) {
                             navController.navigate(
                                 Screens.SavedDishNRestaurant.nameArgs(
@@ -158,8 +166,7 @@ fun Account(navController: NavController) {
                             )
                         }
                         SquareCard(
-                            icon = R.drawable.restaurants_icon,
-                            text = "Saved \nRestaurants"
+                            icon = R.drawable.restaurants_icon, text = "Saved \nRestaurants"
                         ) {
                             navController.navigate(
                                 Screens.SavedDishNRestaurant.nameArgs(
@@ -170,8 +177,7 @@ fun Account(navController: NavController) {
 
                     }
                     SpacerHeight(value = 10.dp)
-                    Row(
-                        horizontalArrangement = Arrangement.Start,
+                    Row(horizontalArrangement = Arrangement.Start,
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier
                             .clickable { navController.navigate(Screens.Orders.route) }
@@ -180,8 +186,7 @@ fun Account(navController: NavController) {
                                 color = colorResource(id = R.color.card_bg),
                                 shape = MaterialTheme.shapes.medium
                             )
-                            .padding(15.dp)
-                    ) {
+                            .padding(15.dp)) {
                         Image(
                             painter = painterResource(id = R.drawable.tray_icon),
                             modifier = Modifier.size(20.dp),
@@ -190,8 +195,7 @@ fun Account(navController: NavController) {
                         )
                         SpacerWidth(value = 10.dp)
                         Text(
-                            text = "My Orders",
-                            style = MaterialTheme.typography.body2.copy(
+                            text = "My Orders", style = MaterialTheme.typography.body2.copy(
                                 color = colorResource(
                                     id = R.color.text_color
                                 ), fontSize = 12.sp
@@ -204,8 +208,9 @@ fun Account(navController: NavController) {
             }
             SpacerHeight(value = 15.dp)
             Text(
-                text = stringResource(id = R.string.delivery_address), modifier = Modifier
-                    .fillMaxWidth(), textAlign = TextAlign.Start,
+                text = stringResource(id = R.string.delivery_address),
+                modifier = Modifier.fillMaxWidth(),
+                textAlign = TextAlign.Start,
                 style = MaterialTheme.typography.body2
             )
             SpacerHeight(value = 10.dp)
@@ -234,13 +239,11 @@ fun Account(navController: NavController) {
                     )
                     SpacerWidth(value = 10.dp)
                     Text(
-                        text = completeAddress,
-                        style = MaterialTheme.typography.body2.copy(
+                        text = completeAddress, style = MaterialTheme.typography.body2.copy(
                             color = colorResource(
                                 id = R.color.text_color
                             ), fontSize = 12.sp
-                        ),
-                        modifier = Modifier.weight(1f)
+                        ), modifier = Modifier.weight(1f)
                     )
                     SpacerWidth(value = 10.dp)
                     if (isEditable) {
@@ -317,13 +320,11 @@ fun Account(navController: NavController) {
                                 onValueChange = { state = it },
                                 placeholder = {
                                     Text(
-                                        text = "State",
-                                        style = MaterialTheme.typography.body2.copy(
+                                        text = "State", style = MaterialTheme.typography.body2.copy(
                                             color = colorResource(
                                                 id = R.color.card_text
                                             ), fontSize = 12.sp
-                                        ),
-                                        modifier = Modifier.weight(1f)
+                                        ), modifier = Modifier.weight(1f)
                                     )
                                 },
                                 modifier = Modifier.size(width = width.dp, height = 50.dp)
@@ -351,19 +352,16 @@ fun Account(navController: NavController) {
                             onValueChange = { country = it },
                             placeholder = {
                                 Text(
-                                    text = "Country",
-                                    style = MaterialTheme.typography.caption.copy(
+                                    text = "Country", style = MaterialTheme.typography.caption.copy(
                                         color = colorResource(
                                             id = R.color.card_text
                                         ), fontSize = 12.sp
-                                    ),
-                                    modifier = Modifier.weight(1f)
+                                    ), modifier = Modifier.weight(1f)
                                 )
                             },
                             modifier = Modifier
                                 .size(
-                                    width = (configuration.screenWidthDp).dp,
-                                    height = 50.dp
+                                    width = (configuration.screenWidthDp).dp, height = 50.dp
                                 )
                                 .padding(horizontal = 10.dp)
                         )
@@ -386,7 +384,7 @@ fun Account(navController: NavController) {
                                     contentDescription = "",
                                     modifier = Modifier.size(18.dp),
                                     colorFilter = ColorFilter.tint(
-                                        MaterialTheme.colors.primaryVariant
+                                        Color.White
                                     )
                                 )
                             }
@@ -423,8 +421,9 @@ fun Account(navController: NavController) {
 
             SpacerHeight(value = 10.dp)
             Text(
-                text = stringResource(id = R.string.cards), modifier = Modifier
-                    .fillMaxWidth(), textAlign = TextAlign.Start,
+                text = stringResource(id = R.string.cards),
+                modifier = Modifier.fillMaxWidth(),
+                textAlign = TextAlign.Start,
                 style = MaterialTheme.typography.body2
             )
             SpacerHeight(value = 10.dp)
@@ -443,8 +442,9 @@ fun Account(navController: NavController) {
                 ) {
                     SpacerHeight(value = 10.dp)
                     Text(
-                        text = stringResource(id = R.string.trans), modifier = Modifier
-                            .fillMaxWidth(), textAlign = TextAlign.Start,
+                        text = stringResource(id = R.string.trans),
+                        modifier = Modifier.fillMaxWidth(),
+                        textAlign = TextAlign.Start,
                         style = MaterialTheme.typography.body2
                     )
                     SpacerHeight(value = 10.dp)
@@ -459,8 +459,7 @@ fun Account(navController: NavController) {
                                     sales = 1367,
                                     icon = R.drawable.pepperoni_pizza,
                                     isRestaurant = false
-                                ),
-                                RestaurantDishModel(
+                                ), RestaurantDishModel(
                                     restaurantName = "Philadelphia rolls\nwith salmon",
                                     restaurantOffers = "",
                                     stars = 4.0f,
@@ -468,8 +467,7 @@ fun Account(navController: NavController) {
                                     sales = 1286,
                                     icon = R.drawable.salmon,
                                     isRestaurant = false
-                                ),
-                                RestaurantDishModel(
+                                ), RestaurantDishModel(
                                     restaurantName = "Philadelphia rolls\n with salmon",
                                     restaurantOffers = "",
                                     stars = 4.0f,
@@ -477,8 +475,7 @@ fun Account(navController: NavController) {
                                     sales = 1286,
                                     icon = R.drawable.salmon,
                                     isRestaurant = false
-                                ),
-                                RestaurantDishModel(
+                                ), RestaurantDishModel(
                                     restaurantName = "Philadelphia rolls\n with salmon",
                                     restaurantOffers = "",
                                     stars = 4.0f,
@@ -499,37 +496,33 @@ fun Account(navController: NavController) {
 @Preview
 @Composable
 fun AccountView() = Account(
-    navController =
-    rememberNavController()
+    navController = rememberNavController()
 )
 
 @Composable
 private fun SquareCard(
-    icon: Int,
-    text: String,
-    onclick: () -> Unit
+    icon: Int, text: String, onclick: () -> Unit
 ) {
     val configuration = LocalConfiguration.current
 
     val cardSize = ((configuration.screenWidthDp / 2) - 30).dp
     Log.e("TAG", "Account: ${cardSize},${configuration.screenWidthDp}")
-    Column(
-        modifier = Modifier
-            .clickable {
-                onclick()
-            }
-            .size(cardSize)
-            .background(
-                color = colorResource(id = R.color.card_bg),
-                shape = MaterialTheme.shapes.medium.copy(
-                    CornerSize(15.dp)
-                )
-            ),
+    Column(modifier = Modifier
+        .clickable {
+            onclick()
+        }
+        .size(cardSize)
+        .background(
+            color = colorResource(id = R.color.card_bg),
+            shape = MaterialTheme.shapes.medium.copy(
+                CornerSize(15.dp)
+            )
+        ),
         verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
+        horizontalAlignment = Alignment.CenterHorizontally) {
         Image(
-            painter = painterResource(id = icon), contentDescription = "",
+            painter = painterResource(id = icon),
+            contentDescription = "",
             colorFilter = ColorFilter.tint(MaterialTheme.colors.primaryVariant)
         )
         UIElements().SpacerHeight(value = 20.dp)
