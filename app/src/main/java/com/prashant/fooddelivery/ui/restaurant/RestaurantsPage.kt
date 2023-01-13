@@ -36,7 +36,6 @@ import com.prashant.fooddelivery.methods.CommonMethod.fromJson
 import com.prashant.fooddelivery.models.RestaurantDishModel
 import com.prashant.fooddelivery.navigation.Screens
 import com.prashant.fooddelivery.navigation.restaurantPageArgs
-import com.prashant.fooddelivery.uielement.UIElements
 import com.prashant.fooddelivery.uielement.UIElements.Companion.uiElements
 
 @Composable
@@ -244,11 +243,11 @@ fun RestaurantsPage(navController: NavController) {
                             verticalArrangement = Arrangement.Top,
                             horizontalAlignment = Alignment.End,
                             modifier = Modifier
-                            .animateContentSize(animationSpec = tween(100))
-                            .clickable(
-                                interactionSource = remember { MutableInteractionSource() },
-                                indication = null
-                            ) { showMore = !showMore }) {
+                                .animateContentSize(animationSpec = tween(100))
+                                .clickable(
+                                    interactionSource = remember { MutableInteractionSource() },
+                                    indication = null
+                                ) { showMore = !showMore }) {
 
                             // if showMore is true, the Text will expand
                             // Else Text will be restricted to 3 Lines of display
@@ -275,7 +274,9 @@ fun RestaurantsPage(navController: NavController) {
                             Image(
                                 painter = painterResource(R.drawable.ic_back),
                                 contentDescription = "expand trigger",
-                                modifier = Modifier.rotate(if (showMore) 90f else -90f).padding(end = 10.dp)
+                                modifier = Modifier
+                                    .rotate(if (showMore) 90f else -90f)
+                                    .padding(end = 10.dp)
                             )
                         }
                     }
@@ -301,6 +302,7 @@ fun RestaurantsPage(navController: NavController) {
                     RestaurantDishCard(
                         restaurants[index],
                         isBottomRowRequire = true,
+                        paddingEnd = if (index == restaurants.size - 1) 0.dp else 10.dp,
                         onCardClick = {
                             navController.navigate(Screens.ItemPage.route)
                         })

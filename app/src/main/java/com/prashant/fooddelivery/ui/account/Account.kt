@@ -29,6 +29,10 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.prashant.fooddelivery.R
+import com.prashant.fooddelivery.models.RestaurantDishModel
+import com.prashant.fooddelivery.navigation.Screens
+import com.prashant.fooddelivery.navigation.savedDishes
+import com.prashant.fooddelivery.navigation.savedRestaurants
 import com.prashant.fooddelivery.uielement.UIElements
 
 @Composable
@@ -39,6 +43,31 @@ fun Account(navController: NavController) {
     var isEditable by rememberSaveable {
         mutableStateOf(false)
     }
+    var isAddressEditable by rememberSaveable {
+        mutableStateOf(false)
+    }
+    var isActive by rememberSaveable {
+        mutableStateOf(false)
+    }
+    var completeAddress by rememberSaveable {
+        mutableStateOf("Your Address")
+    }
+    var addressLine by rememberSaveable {
+        mutableStateOf("")
+    }
+    var district by rememberSaveable {
+        mutableStateOf("")
+    }
+    var state by rememberSaveable {
+        mutableStateOf("")
+    }
+    var pinCode by rememberSaveable {
+        mutableStateOf("")
+    }
+    var country by rememberSaveable {
+        mutableStateOf("")
+    }
+    var originalName = name
 
     val editIcon = if (isEditable) R.drawable.ic_setting_edit else R.drawable.ic_setting
     with(UIElements()) {
@@ -62,7 +91,7 @@ fun Account(navController: NavController) {
                         id = R.drawable.ic_comment
                     ),
                     contentDescription = "",
-                    colorFilter = ColorFilter.tint(color = colorResource(id = R.color.app_bg))
+                    colorFilter = ColorFilter.tint(color = Color.Transparent)
                 )
                 ConstraintLayout {
                     val (image, uploadButton) = createRefs()
@@ -86,73 +115,285 @@ fun Account(navController: NavController) {
                             })
                     }
                 }
-                Image(
-                    painter = painterResource(id = editIcon), contentDescription = "",
-                    modifier = Modifier.clickable { isEditable = !isEditable }
-                )
+                Image(painter = painterResource(id = editIcon),
+                    contentDescription = "",
+                    modifier = Modifier.clickable {
+                        isEditable = !isEditable
+                        isAddressEditable = false
+                        originalName = name
+                    })
             }
             SpacerHeight(value = 20.dp)
-            TextField(
-                value = name, onValueChange = { name = it },
+            OutlinedTextField(
+                value = name,
+                onValueChange = { name = it },
                 enabled = isEditable,
                 textStyle = MaterialTheme.typography.body1.copy(textAlign = TextAlign.Center),
                 colors = TextFieldDefaults.textFieldColors(
                     backgroundColor = Color.Transparent,
-                    focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent,
-                    disabledIndicatorColor = Color.Transparent
-                ),
+                    focusedIndicatorColor = if (isEditable) MaterialTheme.colors.primaryVariant else Color.Transparent,
+                    unfocusedIndicatorColor = if (isEditable) MaterialTheme.colors.primaryVariant else Color.Transparent,
+                    disabledIndicatorColor = if (isEditable) MaterialTheme.colors.primaryVariant else Color.Transparent
+                )/*,
+                trailingIcon = {
+                    if (isEditable){
+                        Image(
+                            painter = painterResource(id = R.drawable.check_icon),
+                            contentDescription = "",
+                            colorFilter = ColorFilter.tint(MaterialTheme.colors.primaryVariant),
+                            modifier = Modifier.size(20.dp).clickable {  }
+                        )
+                    }
+                }*/
             )
 
             AnimatedVisibility(visible = !isEditable) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween,
+                Column(
+                    verticalArrangement = Arrangement.Top,
+                    horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    SquareCard(
-                        icon = R.drawable.like_icon,
-                        text = "Saved \nDishes"
-                    )
-                    SquareCard(
-                        icon = R.drawable.restaurants_icon,
-                        text = "Saved \nRestaurants"
-                    )
+                    Row(
+                        verticalAlignment = Alignment.Top,
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        SquareCard(
+                            icon = R.drawable.like_icon, text = "Saved \nDishes"
+                        ) {
+                            navController.navigate(
+                                Screens.SavedDishNRestaurant.nameArgs(
+                                    savedDishes
+                                )
+                            )
+                        }
+                        SquareCard(
+                            icon = R.drawable.restaurants_icon, text = "Saved \nRestaurants"
+                        ) {
+                            navController.navigate(
+                                Screens.SavedDishNRestaurant.nameArgs(
+                                    savedRestaurants
+                                )
+                            )
+                        }
+
+                    }
+                    SpacerHeight(value = 10.dp)
+                    Row(horizontalArrangement = Arrangement.Start,
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier
+                            .clickable { navController.navigate(Screens.Orders.route) }
+                            .fillMaxWidth()
+                            .background(
+                                color = colorResource(id = R.color.card_bg),
+                                shape = MaterialTheme.shapes.medium
+                            )
+                            .padding(15.dp)) {
+                        Image(
+                            painter = painterResource(id = R.drawable.tray_icon),
+                            modifier = Modifier.size(20.dp),
+                            contentDescription = "",
+                            colorFilter = ColorFilter.tint(colorResource(id = R.color.text_color))
+                        )
+                        SpacerWidth(value = 10.dp)
+                        Text(
+                            text = "My Orders", style = MaterialTheme.typography.body2.copy(
+                                color = colorResource(
+                                    id = R.color.text_color
+                                ), fontSize = 12.sp
+                            )
+                        )
+                    }
                 }
+
+
             }
             SpacerHeight(value = 15.dp)
             Text(
-                text = stringResource(id = R.string.delivery_address), modifier = Modifier
-                    .fillMaxWidth(), textAlign = TextAlign.Start,
+                text = stringResource(id = R.string.delivery_address),
+                modifier = Modifier.fillMaxWidth(),
+                textAlign = TextAlign.Start,
                 style = MaterialTheme.typography.body2
             )
             SpacerHeight(value = 10.dp)
-            Row(
-                horizontalArrangement = Arrangement.Start,
-                verticalAlignment = Alignment.CenterVertically,
+            Column(
+                verticalArrangement = Arrangement.Top,
+                horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
-                    .fillMaxWidth()
                     .background(
                         color = colorResource(id = R.color.card_bg),
                         shape = MaterialTheme.shapes.medium
                     )
-                    .padding(horizontal = 20.dp, vertical = 10.dp)
+                    .padding(bottom = if (isAddressEditable) 10.dp else 0.dp)
             ) {
-                Image(
-                    painter = painterResource(id = R.drawable.place_icon),
-                    modifier = Modifier.size(20.dp),
-                    contentDescription = "",
-                    colorFilter = ColorFilter.tint(colorResource(id = R.color.text_color))
-                )
-                SpacerWidth(value = 10.dp)
-                Text(
-                    text = "USA, Oklahoma, Springdale, 4301-4499 NW …",
-                    style = MaterialTheme.typography.body2.copy(
-                        color = colorResource(
-                            id = R.color.text_color
-                        ), fontSize = 12.sp
+                Row(
+                    horizontalArrangement = Arrangement.Start,
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(15.dp)
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.place_icon),
+                        modifier = Modifier.size(20.dp),
+                        contentDescription = "",
+                        colorFilter = ColorFilter.tint(colorResource(id = R.color.text_color))
                     )
-                )
+                    SpacerWidth(value = 10.dp)
+                    Text(
+                        text = completeAddress, style = MaterialTheme.typography.body2.copy(
+                            color = colorResource(
+                                id = R.color.text_color
+                            ), fontSize = 12.sp
+                        ), modifier = Modifier.weight(1f)
+                    )
+                    SpacerWidth(value = 10.dp)
+                    if (isEditable) {
+                        Image(
+                            painter = painterResource(id = if (!isAddressEditable) R.drawable.ic_edit else R.drawable.close_icon),
+                            modifier = Modifier
+                                .size(20.dp)
+                                .clickable { isAddressEditable = !isAddressEditable },
+                            contentDescription = "",
+                            colorFilter = ColorFilter.tint(colorResource(id = R.color.text_color))
+                        )
+                    }
+                }
+                AnimatedVisibility(visible = isAddressEditable) {
+                    val configuration = LocalConfiguration.current
+                    val width = (configuration.screenWidthDp - 100) / 2
+                    Column(
+                        verticalArrangement = Arrangement.Top,
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 5.dp, vertical = 5.dp)
+                    ) {
+                        Row(
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 10.dp)
+                        ) {
+                            OutlinedTextField(
+                                value = addressLine,
+                                onValueChange = { addressLine = it },
+                                placeholder = {
+                                    Text(
+                                        text = "Address line",
+                                        style = MaterialTheme.typography.body2.copy(
+                                            color = colorResource(
+                                                id = R.color.card_text
+                                            ), fontSize = 12.sp
+                                        ),
+                                        modifier = Modifier.weight(1f)
+                                    )
+                                },
+                                modifier = Modifier.size(width = width.dp, height = 50.dp)
+                            )
+                            OutlinedTextField(
+                                value = district,
+                                onValueChange = { district = it },
+                                placeholder = {
+                                    Text(
+                                        text = "District",
+                                        style = MaterialTheme.typography.caption.copy(
+                                            color = colorResource(
+                                                id = R.color.card_text
+                                            ), fontSize = 12.sp
+                                        ),
+                                        modifier = Modifier.weight(1f)
+                                    )
+                                },
+                                modifier = Modifier.size(width = width.dp, height = 50.dp)
+                            )
+                        }
+                        SpacerHeight(value = 10.dp)
+                        Row(
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 10.dp)
+                        ) {
+                            OutlinedTextField(
+                                value = state,
+                                onValueChange = { state = it },
+                                placeholder = {
+                                    Text(
+                                        text = "State", style = MaterialTheme.typography.body2.copy(
+                                            color = colorResource(
+                                                id = R.color.card_text
+                                            ), fontSize = 12.sp
+                                        ), modifier = Modifier.weight(1f)
+                                    )
+                                },
+                                modifier = Modifier.size(width = width.dp, height = 50.dp)
+                            )
+                            OutlinedTextField(
+                                value = pinCode,
+                                onValueChange = { pinCode = it },
+                                placeholder = {
+                                    Text(
+                                        text = "Pin code",
+                                        style = MaterialTheme.typography.caption.copy(
+                                            color = colorResource(
+                                                id = R.color.card_text
+                                            ), fontSize = 12.sp
+                                        ),
+                                        modifier = Modifier.weight(1f)
+                                    )
+                                },
+                                modifier = Modifier.size(width = width.dp, height = 50.dp)
+                            )
+                        }
+                        SpacerHeight(value = 10.dp)
+                        OutlinedTextField(
+                            value = country,
+                            onValueChange = { country = it },
+                            placeholder = {
+                                Text(
+                                    text = "Country", style = MaterialTheme.typography.caption.copy(
+                                        color = colorResource(
+                                            id = R.color.card_text
+                                        ), fontSize = 12.sp
+                                    ), modifier = Modifier.weight(1f)
+                                )
+                            },
+                            modifier = Modifier
+                                .size(
+                                    width = (configuration.screenWidthDp).dp, height = 50.dp
+                                )
+                                .padding(horizontal = 10.dp)
+                        )
+                        SpacerHeight(value = 10.dp)
+                        Row(
+                            horizontalArrangement = Arrangement.End,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 10.dp)
+                        ) {
+                            Button(onClick = {
+                                completeAddress =
+                                    "$addressLine, $district, $state, $country, $pinCode"
+                                isAddressEditable = false
+                            }) {
+                                Text(text = "Save")
+                                SpacerWidth(value = 10.dp)
+                                Image(
+                                    painter = painterResource(id = R.drawable.check_icon),
+                                    contentDescription = "",
+                                    modifier = Modifier.size(18.dp),
+                                    colorFilter = ColorFilter.tint(
+                                        Color.White
+                                    )
+                                )
+                            }
+                        }
+
+                    }
+                }
             }
             SpacerHeight(value = 10.dp)
             AnimatedVisibility(visible = isEditable) {
@@ -165,7 +406,7 @@ fun Account(navController: NavController) {
                             color = colorResource(id = R.color.card_bg),
                             shape = MaterialTheme.shapes.medium
                         )
-                        .padding(horizontal = 20.dp)
+                        .padding(15.dp)
                 ) {
 
                     Text(
@@ -176,14 +417,15 @@ fun Account(navController: NavController) {
                             ), fontSize = 12.sp
                         )
                     )
-                    Switch(checked = true, onCheckedChange = {})
+                    CustomSwitch(checked = isActive, onCheckedChange = { isActive = !isActive })
                 }
             }
 
             SpacerHeight(value = 10.dp)
             Text(
-                text = stringResource(id = R.string.cards), modifier = Modifier
-                    .fillMaxWidth(), textAlign = TextAlign.Start,
+                text = stringResource(id = R.string.cards),
+                modifier = Modifier.fillMaxWidth(),
+                textAlign = TextAlign.Start,
                 style = MaterialTheme.typography.body2
             )
             SpacerHeight(value = 10.dp)
@@ -194,6 +436,61 @@ fun Account(navController: NavController) {
             ) {
 
             }
+            AnimatedVisibility(visible = !isEditable) {
+                Column(
+                    verticalArrangement = Arrangement.Top,
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    SpacerHeight(value = 10.dp)
+                    Text(
+                        text = stringResource(id = R.string.trans),
+                        modifier = Modifier.fillMaxWidth(),
+                        textAlign = TextAlign.Start,
+                        style = MaterialTheme.typography.body2
+                    )
+                    SpacerHeight(value = 10.dp)
+                    repeat(3) {
+                        Transactions(
+                            itemList = listOf(
+                                RestaurantDishModel(
+                                    restaurantName = "Homemade Pizza\nPepperoni",
+                                    restaurantOffers = "",
+                                    stars = 4.0f,
+                                    comments = 261,
+                                    sales = 1367,
+                                    icon = R.drawable.pepperoni_pizza,
+                                    isRestaurant = false
+                                ), RestaurantDishModel(
+                                    restaurantName = "Philadelphia rolls\nwith salmon",
+                                    restaurantOffers = "",
+                                    stars = 4.0f,
+                                    comments = 285,
+                                    sales = 1286,
+                                    icon = R.drawable.salmon,
+                                    isRestaurant = false
+                                ), RestaurantDishModel(
+                                    restaurantName = "Philadelphia rolls\n with salmon",
+                                    restaurantOffers = "",
+                                    stars = 4.0f,
+                                    comments = 285,
+                                    sales = 1286,
+                                    icon = R.drawable.salmon,
+                                    isRestaurant = false
+                                ), RestaurantDishModel(
+                                    restaurantName = "Philadelphia rolls\n with salmon",
+                                    restaurantOffers = "",
+                                    stars = 4.0f,
+                                    comments = 285,
+                                    sales = 1286,
+                                    icon = R.drawable.salmon,
+                                    isRestaurant = false
+                                )
+                            )
+                        )
+                    }
+                }
+            }
         }
     }
 }
@@ -201,40 +498,41 @@ fun Account(navController: NavController) {
 @Preview
 @Composable
 fun AccountView() = Account(
-    navController =
-    rememberNavController()
+    navController = rememberNavController()
 )
 
 @Composable
-fun SquareCard(
-    icon: Int,
-    text: String
+private fun SquareCard(
+    icon: Int, text: String, onclick: () -> Unit
 ) {
     val configuration = LocalConfiguration.current
 
     val cardSize = ((configuration.screenWidthDp / 2) - 30).dp
     Log.e("TAG", "Account: ${cardSize},${configuration.screenWidthDp}")
-    Column(
-        modifier = Modifier
-            .size(cardSize)
-            .background(
-                color = colorResource(id = R.color.card_bg),
-                shape = MaterialTheme.shapes.medium.copy(
-                    CornerSize(15.dp)
-                )
-            ),
+    Column(modifier = Modifier
+        .clickable {
+            onclick()
+        }
+        .size(cardSize)
+        .background(
+            color = colorResource(id = R.color.card_bg),
+            shape = MaterialTheme.shapes.medium.copy(
+                CornerSize(15.dp)
+            )
+        ),
         verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
+        horizontalAlignment = Alignment.CenterHorizontally) {
         Image(
-            painter = painterResource(id = icon), contentDescription = "",
+            painter = painterResource(id = icon),
+            contentDescription = "",
             colorFilter = ColorFilter.tint(MaterialTheme.colors.primaryVariant)
         )
         UIElements().SpacerHeight(value = 20.dp)
         Text(
-            text = "Saved Dishes",
+            text = text,
             style = MaterialTheme.typography.body1,
-            color = colorResource(id = R.color.text_color)
+            color = colorResource(id = R.color.text_color),
+            textAlign = TextAlign.Center
         )
 
     }

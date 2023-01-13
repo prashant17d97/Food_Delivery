@@ -326,7 +326,7 @@ fun ItemPage(navController: NavController) {
                 items(count = restaurants.size, itemContent = { index ->
                     RestaurantDishCard(
                         restaurants[index],
-                        paddingEnd = 10.dp,
+                        paddingEnd = if (index == restaurants.size - 1) 0.dp else 10.dp,
                         isBottomRowRequire = true,
                         onCardClick = {
                             navController.navigate(Screens.ItemPage.route)

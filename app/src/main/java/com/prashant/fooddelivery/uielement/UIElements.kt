@@ -1334,49 +1334,141 @@ class UIElements {
         }
     }
 
+    @Composable
+    fun <Generic> Transactions(
+        itemList: List<Generic>,
+        onClick: (Boolean) -> Unit = {}
+    ) {
+        var isExpanded by rememberSaveable {
+            mutableStateOf(false)
+        }
+        /**
+         *
+         */
+        Column(
+            verticalArrangement = Arrangement.Top,
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier
+                .fillMaxWidth()
+        ) {
+            Column(
+                verticalArrangement = Arrangement.Top,
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(
+                        color = colorResource(id = R.color.card_bg),
+                        shape = MaterialTheme.shapes.medium
+                    )
+            ) {
+                Row(
+                    horizontalArrangement = Arrangement.Start,
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(10.dp)
+                ) {
+
+                    Image(
+                        painter = painterResource(id = R.drawable.margarita_logo),
+                        modifier = Modifier.size(40.dp),
+                        contentDescription = "Restaurants Logo"
+                    )
+                    Text(
+                        text = "July 5, 2019",
+                        style = MaterialTheme.typography.subtitle1,
+                        color = colorResource(
+                            id = R.color.text_color
+                        ),
+                        modifier = Modifier.padding(5.dp)
+                    )
+                    Text(
+                        text = "$155.25",
+                        style = MaterialTheme.typography.subtitle1,
+                        color = colorResource(
+                            id = R.color.text_color
+                        ),
+                        textAlign = TextAlign.End,
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(5.dp)
+                    )
+
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_arrow_up),
+                        contentDescription = "",
+                        modifier = Modifier
+                            .clickable { isExpanded = !isExpanded }
+                            .rotate(if (!isExpanded) 180f else 0f)
+
+
+                    )
+                }
+                AnimatedVisibility(visible = isExpanded) {
+                    Column(
+                        verticalArrangement = Arrangement.Top,
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                    ) {
+                        repeat(itemList.size) {
+                            Row(
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.CenterVertically,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(
+                                        start = 10.dp,
+                                        end = 20.dp,
+                                        top = 5.dp
+                                    )
+                            ) {
+                                Text(
+                                    text = "Peperoni Homemade Pizza",
+                                    style = MaterialTheme.typography.subtitle1.copy(
+                                        color = colorResource(id = R.color.text_color),
+                                        fontSize = 14.sp,
+                                        fontWeight = FontWeight.Medium
+                                    )
+                                )
+                                Text(
+                                    text = "$50.67",
+                                    style = MaterialTheme.typography.subtitle1.copy(
+                                        color = colorResource(id = R.color.text_color),
+                                        fontSize = 14.sp,
+                                        fontWeight = FontWeight.Medium
+                                    )
+                                )
+                            }
+                        }
+                        SpacerHeight(value = 10.dp)
+                        Text(
+                            text = "October 11, 2019",
+                            style = MaterialTheme.typography.subtitle1.copy(
+                                color = colorResource(id = R.color.text_color),
+                                fontSize = 10.sp,
+                                fontWeight = FontWeight.Light
+                            ),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 10.dp),
+                            textAlign = TextAlign.Start
+                        )
+                        SpacerHeight(value = 10.dp)
+                    }
+                }
+
+            }
+            SpacerHeight(value = 10.dp)
+        }
+
+    }
+
 
     @Preview
     @Composable
-    fun PreviewUIElement() = Order(
-        listOf(
-            RestaurantDishModel(
-                restaurantName = "Homemade Pizza\nPepperoni",
-                restaurantOffers = "",
-                stars = 4.0f,
-                comments = 261,
-                sales = 1367,
-                icon = R.drawable.pepperoni_pizza,
-                isRestaurant = false
-            ),
-            RestaurantDishModel(
-                restaurantName = "Philadelphia rolls\nwith salmon",
-                restaurantOffers = "",
-                stars = 4.0f,
-                comments = 285,
-                sales = 1286,
-                icon = R.drawable.salmon,
-                isRestaurant = false
-            ),
-            RestaurantDishModel(
-                restaurantName = "Philadelphia rolls\n with salmon",
-                restaurantOffers = "",
-                stars = 4.0f,
-                comments = 285,
-                sales = 1286,
-                icon = R.drawable.salmon,
-                isRestaurant = false
-            ),
-            RestaurantDishModel(
-                restaurantName = "Philadelphia rolls\n with salmon",
-                restaurantOffers = "",
-                stars = 4.0f,
-                comments = 285,
-                sales = 1286,
-                icon = R.drawable.salmon,
-                isRestaurant = false
-            )
-        )
-    )
+    fun PreviewUIElement() =
+        CustomTextField(phone = "", onValueChange = {}, backGround = Color.Transparent)
 }
 
 

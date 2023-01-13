@@ -45,10 +45,8 @@ fun Search(navController: NavController) {
     var slider by rememberSaveable {
         mutableStateOf(0f)
     }
-    val sheetState = rememberModalBottomSheetState(
-        initialValue = ModalBottomSheetValue.Hidden,
-        confirmStateChange = { it != ModalBottomSheetValue.HalfExpanded }
-    )
+    val sheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden,
+        confirmStateChange = { it != ModalBottomSheetValue.HalfExpanded })
     val coroutineScope = rememberCoroutineScope()
 
     BackHandler(sheetState.isVisible) {
@@ -63,8 +61,7 @@ fun Search(navController: NavController) {
             sales = 1367,
             icon = R.drawable.pepperoni_pizza,
             isRestaurant = false
-        ),
-        RestaurantDishModel(
+        ), RestaurantDishModel(
             restaurantName = "Philadelphia rolls\nwith salmon",
             restaurantOffers = "",
             stars = 4.0f,
@@ -133,14 +130,11 @@ fun Search(navController: NavController) {
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Spacer(modifier = Modifier.height(10.dp))
-            uiElements.VerticalGridCells(
-                spanCount = CellCounts.TWO,
+            uiElements.VerticalGridCells(spanCount = CellCounts.TWO,
                 list = dishes,
                 modifier = Modifier.fillMaxWidth(),
                 itemScope = {
-                    uiElements.RestaurantDishCard(
-                        it,
-                        isBottomRowRequire = true,
+                    uiElements.RestaurantDishCard(it, isBottomRowRequire = true,
 
                         onCardClick = {
                             navController.navigate(Screens.ItemPage.route)
@@ -151,15 +145,14 @@ fun Search(navController: NavController) {
     ModalBottomSheetLayout(
         sheetState = sheetState,
         sheetContent = {
-            BottomSheet(
-                rating = rating,
+            BottomSheet(rating = rating,
                 slider = slider,
+                state = sheetState.isVisible,
                 sliderValues = { slider = it },
                 ratingValues = {
                     rating = it
                     Log.e("TAG", "Search: $slider, $rating")
-                }
-            )
+                })
         },
         modifier = Modifier
             .fillMaxSize()
@@ -181,7 +174,8 @@ fun BottomSheet(
     rating: Float,
     slider: Float,
     ratingValues: (Float) -> Unit = {},
-    sliderValues: (Float) -> Unit = {}
+    sliderValues: (Float) -> Unit = {},
+    state: Boolean
 ) {
 
     Column(
@@ -190,9 +184,10 @@ fun BottomSheet(
                 color = colorResource(id = R.color.card_bg),
                 shape = MaterialTheme.shapes.medium.copy(CornerSize(20.dp))
             )
-            .padding(20.dp)
-            .fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally
+            .padding(
+                20.dp,
+            )
+            .fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally
 
     ) {
         Divider(
@@ -263,20 +258,16 @@ fun BottomSheet(
                 style = MaterialTheme.typography.subtitle1.copy(fontSize = 14.sp),
                 color = colorResource(id = R.color.text_color)
             )
-            RatingBar(
-                value = rating,
-                config = RatingBarConfig()
-                    .activeColor(MaterialTheme.colors.primaryVariant)
-                    .inactiveBorderColor(MaterialTheme.colors.primaryVariant)
-                    .numStars(5)
+            RatingBar(value = rating,
+                config = RatingBarConfig().activeColor(MaterialTheme.colors.primaryVariant)
+                    .inactiveBorderColor(MaterialTheme.colors.primaryVariant).numStars(5)
                     .style(RatingBarStyle.HighLighted),
                 onValueChange = {
                     ratingValues(it)
                 },
                 onRatingChanged = {
                     Log.d("TAG", "onRatingChanged: $it")
-                }
-            )
+                })
         }
 
     }
