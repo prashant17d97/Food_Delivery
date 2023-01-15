@@ -12,6 +12,7 @@ const val name = "Name"
 const val savedDishes = "Saved Dishes"
 const val savedRestaurants = "Saved Restaurants"
 const val restaurantPageArgs = "RestaurantPageArgs"
+const val feedbackList = "FeedbackList"
 
 
 /**
@@ -97,6 +98,10 @@ sealed class Screens(var title: String, var icon: Int = 0, var route: String) {
             return "$welcome/$name"
         }
     }*/
-    object FeedBacks : Screens(title = feedBacks, route = feedBacks)
+    object FeedBacks : Screens(title = feedBacks, route = "$feedBacks/{$feedbackList}"){
+        fun list(list: String): String {
+            return "$feedBacks/$list"
+        }
+    }
     object Transactions : Screens(title = transactions, route = transactions)
 }

@@ -49,7 +49,12 @@ fun SetupNavGraph(navController: NavHostController) {
         composable(route = Screens.Orders.route) {
             Orders(navController)
         }
-        composable(route = Screens.FeedBacks.route) {
+        composable(route = Screens.FeedBacks.route,arguments = listOf(
+            navArgument(feedbackList) {
+                type = NavType.StringType
+            }
+        )
+        ) {
             FeedBacks(navController)
         }
         composable(route = Screens.Transactions.route) {

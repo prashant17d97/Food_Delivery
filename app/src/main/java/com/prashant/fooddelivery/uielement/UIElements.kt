@@ -13,6 +13,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -29,6 +30,7 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.*
@@ -60,7 +62,6 @@ class UIElements {
     companion object {
         val uiElements = UIElements()
     }
-
 
     @Composable
     fun CustomPasswordTextField(
@@ -506,7 +507,6 @@ class UIElements {
 
     }
 
-
     @Composable
     fun SearchCard(
         value: String,
@@ -700,7 +700,6 @@ class UIElements {
 
         }
     }
-
 
     @Composable
     fun SearchRecentSuggestions(dataModel: SuggestionModel, value: (String) -> Unit) {
@@ -974,16 +973,18 @@ class UIElements {
     @Composable
     fun CheckoutItemCard(
         isCheckOutPage: Boolean = true,
-        onCardClick: () -> Unit
+        color: Color = MaterialTheme.colors.primaryVariant,
+        modifier: Modifier = Modifier,
+        onCardClick: () -> Unit = {}
     ) {
         Column(
-            modifier = Modifier.fillMaxWidth()
+            modifier = modifier.fillMaxWidth()
         ) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(
-                        color = MaterialTheme.colors.primaryVariant,
+                        color = color,
                         shape = MaterialTheme.shapes.medium
                     ),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -1208,15 +1209,17 @@ class UIElements {
                         id = R.color.text_color
                     )
                 )
-                if (isOnGoing) {
-                    Text(
-                        text = "Current order",
-                        style = MaterialTheme.typography.subtitle1,
-                        color = colorResource(
-                            id = R.color.text_color
-                        )
+                Text(
+                    text = if (isOnGoing) {
+                        "Current order"
+                    } else {
+                        "Delivered"
+                    },
+                    style = MaterialTheme.typography.subtitle1,
+                    color = colorResource(
+                        id = R.color.text_color
                     )
-                }
+                )
                 Image(
                     painter = painterResource(id = R.drawable.ic_arrow_up),
                     contentDescription = "",
@@ -1251,7 +1254,7 @@ class UIElements {
                                 color = colorResource(id = R.color.card_bg),
                                 shape = MaterialTheme.shapes.medium
                             )
-                            .padding(horizontal = 20.dp, vertical = 10.dp)
+                            .padding(10.dp)
                     ) {
                         Row(
                             modifier = Modifier.fillMaxWidth(),
@@ -1464,11 +1467,411 @@ class UIElements {
 
     }
 
+    @Composable
+    fun Cards(
+        isEditable: Boolean = true,
+        click: () -> Unit
+    ) {
+        val localDensity = LocalDensity.current
+        var cardNumber by rememberSaveable {
+            mutableStateOf("")
+        }
+        var editCard by rememberSaveable {
+            mutableStateOf(false)
+        }
+        var cardExp by rememberSaveable {
+            mutableStateOf("")
+        }
+        var cvv by rememberSaveable {
+            mutableStateOf("")
+        }
+        val configuration = (LocalConfiguration.current).screenWidthDp
+        val width = (configuration * 0.75)
+
+        ConstraintLayout(
+            modifier = Modifier
+                .width(width.dp)
+                .height(186.54546.dp)
+                .background(
+                    color = colorResource(id = R.color.card_bg),
+                    shape = MaterialTheme.shapes.medium
+                )
+//                .onGloballyPositioned { coordinates ->
+//                    height(with(localDensity) { coordinates.size.height.toDp() })
+//                }
+                .padding(10.dp)
+        ) {
+            val (icon, close, button, card, date, cvvConstraint) = createRefs()
+            Image(
+                painter = painterResource(id = R.drawable.user_image),
+                modifier = Modifier
+                    .size(40.dp)
+                    .constrainAs(icon) {
+                        top.linkTo(parent.top)
+                        start.linkTo(parent.start)
+                    },
+                contentDescription = ""
+            )
+            AnimatedVisibility(visible = isEditable, modifier = Modifier.constrainAs(close) {
+                top.linkTo(parent.top)
+                end.linkTo(parent.end)
+                bottom.linkTo(icon.bottom)
+            }) {
+                Image(
+                    painter = painterResource(
+                        id = if (editCard) R.drawable.close_icon else R.drawable
+                            .ic_edit
+                    ),
+                    modifier = Modifier
+                        .size(20.dp)
+                        .clickable { editCard = !editCard },
+                    colorFilter = ColorFilter.tint(color = colorResource(id = R.color.text_color)),
+                    contentDescription = ""
+                )
+            }
+            OutlinedTextField(
+                value = cardNumber,
+                enabled = editCard,
+                keyboardOptions = KeyboardOptions(
+                    imeAction = ImeAction.Next,
+                    keyboardType = KeyboardType.Number
+                ),
+                modifier = Modifier
+                    .padding(top = 10.dp)
+                    .constrainAs(card) {
+                        top.linkTo(icon.bottom)
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
+                    },
+                onValueChange = { cardNumber = it },
+                placeholder = {
+                    Text(
+                        text = "**** **** **** 1234",
+                        style = MaterialTheme.typography.body2.copy(
+                            color = colorResource(
+                                id = R.color.card_text
+                            ), fontSize = 12.sp
+                        ),
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                },
+                //modifier = Modifier.size(width = (configuration*0.2).dp, height = 50.dp)
+            )
+            OutlinedTextField(
+                value = cardExp,
+                enabled = editCard,
+                keyboardOptions = KeyboardOptions(
+                    imeAction = ImeAction.Next,
+                    keyboardType = KeyboardType.Number
+                ),
+                onValueChange = { cardExp = it },
+                placeholder = {
+                    Text(
+                        text = "11/12", style = MaterialTheme.typography.body2.copy(
+                            color = colorResource(
+                                id = R.color.card_text
+                            ), fontSize = 12.sp
+                        ), modifier = Modifier.fillMaxWidth()
+                    )
+                },
+                modifier = Modifier
+                    .size(
+                        width = (configuration * 0.2).dp,
+                        height = 60.dp
+                    )
+                    .constrainAs(date) {
+                        top.linkTo(card.bottom)
+                        start.linkTo(parent.start)
+                    }
+                    .padding(top = 10.dp)
+            )
+
+            OutlinedTextField(
+                value = cvv,
+                enabled = editCard,
+                onValueChange = { cvv = it },
+                keyboardOptions = KeyboardOptions(
+                    imeAction = ImeAction.Done,
+                    keyboardType = KeyboardType.Number
+                ),
+                placeholder = {
+                    Text(
+                        text = "123", style = MaterialTheme.typography.body2.copy(
+                            color = colorResource(
+                                id = R.color.card_text
+                            ), fontSize = 12.sp
+                        ), modifier = Modifier.fillMaxWidth()
+                    )
+                },
+                modifier = Modifier
+                    .size(
+                        width = (configuration * 0.2).dp,
+                        height = 60.dp
+                    )
+                    .constrainAs(cvvConstraint) {
+                        top.linkTo(card.bottom)
+                        if (editCard) {
+                            start.linkTo(date.end)
+                            end.linkTo(button.start)
+                        } else {
+                            end.linkTo(parent.end)
+                        }
+                    }
+                    .padding(top = 10.dp)
+            )
+
+            AnimatedVisibility(visible = editCard, modifier = Modifier
+                .constrainAs(button) {
+                    top.linkTo(card.bottom)
+                    end.linkTo(parent.end)
+                }
+                .padding(top = 10.dp)) {
+                Button(onClick = {
+                    editCard = false
+                }) {
+                    Text(text = "Save")
+                    SpacerWidth(value = 10.dp)
+                    Image(
+                        painter = painterResource(id = R.drawable.check_icon),
+                        contentDescription = "",
+                        modifier = Modifier.size(20.dp),
+                        colorFilter = ColorFilter.tint(
+                            Color.White
+                        )
+                    )
+                }
+            }
+
+        }
+    }
+
+    @Composable
+    fun AddCards(onClick: () -> Unit) {
+        val configuration = (LocalConfiguration.current).screenWidthDp
+        val width = (configuration * 0.75)
+
+        ConstraintLayout(
+            modifier = Modifier
+                .width(width.dp)
+                .height(186.54546.dp)
+                .background(
+                    color = colorResource(id = R.color.card_bg),
+                    shape = MaterialTheme.shapes.medium
+                )
+                .padding(10.dp)
+        ) {
+            val (add) = createRefs()
+
+            Icon(imageVector = Icons.Outlined.Add, contentDescription = "", modifier = Modifier
+                .constrainAs(add) {
+                    top.linkTo(parent.top)
+                    bottom.linkTo(parent.bottom)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                }
+                .size(40.dp)
+                .clickable { onClick() }
+                .background(
+                    color = colorResource(id = R.color.card_bg), shape = MaterialTheme
+                        .shapes.medium
+                ),
+                tint = colorResource(id = R.color.text_color)
+            )
+
+        }
+    }
+
+    @Composable
+    fun LeaveFeedbackCard(
+        isPreVisible: Boolean,
+        isNextVisible: Boolean,
+        onPrevious: () -> Unit,
+        onNext: () -> Unit={},
+        onSave: () -> Unit={},
+    ) {
+        val width = (LocalConfiguration.current).screenWidthDp
+        var feedback by rememberSaveable {
+            mutableStateOf("")
+        }
+        var ratingValue by rememberSaveable {
+            mutableStateOf(0f)
+        }
+        ConstraintLayout(
+            modifier = Modifier
+                .background(
+                    color = colorResource(id = R.color.card_bg), shape = MaterialTheme
+                        .shapes.medium
+                )
+                .width(width = (width-20).dp)
+        ) {
+            val (items, feedbackBox, ratingText, rating, button, prev, prevIcon, nextIcon, next) =
+                createRefs()
+
+            CheckoutItemCard(isCheckOutPage = false, color = Color.Transparent,
+                modifier = Modifier
+                    .width(width = width.dp)
+                    .padding(10.dp)
+                    .constrainAs(items) {
+                        top.linkTo(parent.top)
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
+                    })
+
+            TextField(
+                value = feedback,
+                onValueChange = { feedback = it },
+                placeholder = {
+                    Text(
+                        text = "Your feedback.", style = MaterialTheme.typography.body2.copy(
+                            textAlign = TextAlign.Start,
+                            color = colorResource(id = R.color.card_text)
+
+                        )
+                    )
+                },
+                textStyle = MaterialTheme.typography.body1.copy(color = colorResource(id = R.color.text_color)),
+                shape = MaterialTheme.shapes.medium,
+                colors = TextFieldDefaults.textFieldColors(
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent,
+                    disabledIndicatorColor = Color.Transparent
+                ),
+                modifier = Modifier
+                    .width(width = width.dp)
+                    .height(150.dp)
+                    .padding(start = 20.dp, end = 20.dp, top = 0.dp, bottom = 10.dp)
+                    .constrainAs
+                        (feedbackBox) {
+                        top.linkTo(items.bottom)
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
+                    }
+            )
+
+            Text(
+                text = "Your rating", style = MaterialTheme.typography.body1.copy(
+                    textAlign = TextAlign.Start,
+                    color = colorResource(id = R.color.text_color)
+                ),
+                modifier = Modifier
+                    .padding(start = 30.dp, end = 0.dp, top = 10.dp, bottom = 10.dp)
+                    .constrainAs(ratingText) {
+                        top.linkTo(feedbackBox.bottom)
+                        bottom.linkTo(rating.bottom)
+                        start.linkTo(feedbackBox.start)
+                    }
+            )
+
+            RatingBar(value = ratingValue,
+                modifier = Modifier
+                    .padding(
+                        start = 0.dp, end = 30.dp, top = 10.dp, bottom = 10
+                            .dp
+                    )
+                    .constrainAs(rating) {
+                        top.linkTo(feedbackBox.bottom)
+                        end.linkTo(feedbackBox.end)
+                    },
+                config = RatingBarConfig().activeColor(MaterialTheme.colors.primaryVariant)
+                    .inactiveBorderColor(MaterialTheme.colors.primaryVariant).numStars(5)
+                    .size(30.dp).style(RatingBarStyle.HighLighted),
+                onValueChange = {
+                    ratingValue = it
+                },
+                onRatingChanged = {
+                    Log.d("TAG", "onRatingChanged: $it")
+                })
+
+            OutlinedButton(
+                onClick = { onSave() },
+                shape = MaterialTheme.shapes.medium,
+                modifier = Modifier
+                    .width(width.dp)
+                    .padding(horizontal = 20.dp)
+                    .constrainAs(button) {
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
+                        top.linkTo(rating.bottom)
+                    },
+                border = BorderStroke(0.5.dp, MaterialTheme.colors.primaryVariant),
+                contentPadding = PaddingValues(0.dp),  //avoid the little icon
+                colors = ButtonDefaults.buttonColors(backgroundColor = colorResource(id = R.color.card_bg))
+            ) {
+                Text(
+                    modifier = Modifier.padding(start = 10.dp),
+                    text = "Leave feedback", style = MaterialTheme.typography.body1.copy(
+                        color = MaterialTheme.colors.primaryVariant,
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                )
+            }
+
+            if (isPreVisible){
+                Icon(painter = painterResource(id = R.drawable.ic_back), contentDescription = "",
+                    modifier = Modifier
+                        .padding(start = 20.dp, end = 5.dp, top = 10.dp, bottom = 10.dp)
+                        .constrainAs
+                            (prevIcon) {
+                            start.linkTo(parent.start)
+                            top.linkTo(button.bottom)
+                        })
+                Text(
+                    text = "Previous feedback", style = MaterialTheme.typography.body1.copy(
+                        textAlign = TextAlign.Start,
+                        color = colorResource(id = R.color.text_color)
+                    ),
+                    modifier = Modifier
+                        .clickable { onPrevious() }
+                        .constrainAs
+                            (prev) {
+                            start.linkTo(prevIcon.end)
+                            top.linkTo(prevIcon.top)
+                            bottom.linkTo(prevIcon.bottom)
+                        })
+            }
+
+
+            if (isNextVisible){
+                Text(
+                    text = "Next dish", style = MaterialTheme.typography.body1.copy(
+                        textAlign = TextAlign.Start,
+                        color = MaterialTheme.colors.primaryVariant
+                    ),
+                    modifier = Modifier
+                        .clickable { onNext() }
+                        .constrainAs
+                            (next) {
+                            end.linkTo(nextIcon.start)
+                            top.linkTo(nextIcon.top)
+                            bottom.linkTo(nextIcon.bottom)
+                        })
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_back),
+                    tint = MaterialTheme.colors.primaryVariant,
+                    contentDescription = "",
+                    modifier = Modifier
+                        .padding(start = 5.dp, end = 20.dp, top = 10.dp, bottom = 10.dp)
+                        .rotate(180f)
+                        .constrainAs
+                            (nextIcon) {
+                            top.linkTo(button.bottom)
+                            end.linkTo(parent.end)
+                        })
+            }
+
+        }
+    }
+
 
     @Preview
     @Composable
-    fun PreviewUIElement() =
-        CustomTextField(phone = "", onValueChange = {}, backGround = Color.Transparent)
+    fun PreviewUIElement() = LeaveFeedbackCard(
+        isPreVisible =IsVisible.VISIBLE.boolean,
+        isNextVisible =IsVisible.VISIBLE.boolean,
+        onPrevious = {},
+        onNext = {},
+        onSave = {})
 }
 
 

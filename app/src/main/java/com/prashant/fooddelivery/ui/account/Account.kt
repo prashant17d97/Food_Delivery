@@ -1,11 +1,11 @@
 package com.prashant.fooddelivery.ui.account
 
-import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CornerSize
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -15,12 +15,16 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -40,13 +44,19 @@ fun Account(navController: NavController) {
     var name by rememberSaveable {
         mutableStateOf("Jenifer")
     }
+    var cardCount by rememberSaveable {
+        mutableStateOf(1)
+    }
     var isEditable by rememberSaveable {
         mutableStateOf(false)
     }
     var isAddressEditable by rememberSaveable {
         mutableStateOf(false)
     }
-    var isActive by rememberSaveable {
+    var isLocationActive by rememberSaveable {
+        mutableStateOf(false)
+    }
+    var isDarkActive by rememberSaveable {
         mutableStateOf(false)
     }
     var completeAddress by rememberSaveable {
@@ -74,7 +84,7 @@ fun Account(navController: NavController) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(20.dp)
+                .padding(top=20.dp,start=10.dp,end=10.dp,bottom=10.dp)
                 .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
@@ -127,6 +137,12 @@ fun Account(navController: NavController) {
             OutlinedTextField(
                 value = name,
                 onValueChange = { name = it },
+                keyboardOptions = KeyboardOptions(
+                    imeAction = ImeAction.Done,
+                    keyboardType = KeyboardType.Text,
+                    capitalization = KeyboardCapitalization.Words,
+                    autoCorrect = true
+                ),
                 enabled = isEditable,
                 textStyle = MaterialTheme.typography.body1.copy(textAlign = TextAlign.Center),
                 colors = TextFieldDefaults.textFieldColors(
@@ -159,7 +175,7 @@ fun Account(navController: NavController) {
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         SquareCard(
-                            icon = R.drawable.like_icon, text = "Saved \nDishes"
+                            icon = R.drawable.like_icon, text = "Saved\nDishes"
                         ) {
                             navController.navigate(
                                 Screens.SavedDishNRestaurant.nameArgs(
@@ -168,7 +184,7 @@ fun Account(navController: NavController) {
                             )
                         }
                         SquareCard(
-                            icon = R.drawable.restaurants_icon, text = "Saved \nRestaurants"
+                            icon = R.drawable.restaurants_icon, text = "Saved\nRestaurants"
                         ) {
                             navController.navigate(
                                 Screens.SavedDishNRestaurant.nameArgs(
@@ -417,7 +433,7 @@ fun Account(navController: NavController) {
                             ), fontSize = 12.sp
                         )
                     )
-                    CustomSwitch(checked = isActive, onCheckedChange = { isActive = !isActive })
+                    CustomSwitch(checked = isLocationActive, onCheckedChange = { isLocationActive = !isLocationActive })
                 }
             }
 
@@ -430,10 +446,21 @@ fun Account(navController: NavController) {
             )
             SpacerHeight(value = 10.dp)
             Row(
-                verticalAlignment = Alignment.CenterVertically,
+                verticalAlignment = Alignment.Top,
                 horizontalArrangement = Arrangement.Start,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .horizontalScroll(rememberScrollState())
+
             ) {
+                repeat(cardCount) {
+                    Cards(isEditable = isEditable) {
+                    }
+                    SpacerWidth(value = 10.dp)
+                }
+                if (isEditable) {
+                    AddCards { ++cardCount }
+                }
 
             }
             AnimatedVisibility(visible = !isEditable) {
@@ -491,6 +518,82 @@ fun Account(navController: NavController) {
                     }
                 }
             }
+            SpacerHeight(value = 10.dp)
+            AnimatedVisibility(visible = isEditable) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Top,
+                    modifier = Modifier
+                        .fillMaxWidth()
+
+                ) {
+                    Row(
+                        horizontalArrangement = Arrangement.Start,
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(
+                                color = colorResource(id = R.color.card_bg),
+                                shape = MaterialTheme.shapes.medium
+                            )
+                            .padding(15.dp)
+                            .clickable {
+                                navController.navigate(Screens.ForgotPassword.route)
+                            }
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.lock_close),
+                            modifier = Modifier.size(20.dp),
+                            contentDescription = "",
+                            colorFilter = ColorFilter.tint(colorResource(id = R.color.text_color))
+                        )
+                        SpacerWidth(value = 10.dp)
+                        Text(
+                            text = "Change Password", style = MaterialTheme.typography.body2.copy(
+                                color = colorResource(
+                                    id = R.color.text_color
+                                ), fontSize = 12.sp
+                            ), modifier = Modifier.weight(1f)
+                        )
+                        SpacerWidth(value = 10.dp)
+                        Image(
+                            painter = painterResource(id = R.drawable.ic_back),
+                            modifier = Modifier.size(20.dp).rotate(180f),
+                            contentDescription = "",
+                            colorFilter = ColorFilter.tint(colorResource(id = R.color.text_color))
+                        )
+                    }
+                    SpacerHeight(value = 10.dp)
+                    Row(
+                        horizontalArrangement = Arrangement.Start,
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(
+                                color = colorResource(id = R.color.card_bg),
+                                shape = MaterialTheme.shapes.medium
+                            )
+                            .padding(15.dp)
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.moon_icon),
+                            modifier = Modifier.size(20.dp),
+                            contentDescription = "",
+                            colorFilter = ColorFilter.tint(colorResource(id = R.color.text_color))
+                        )
+                        SpacerWidth(value = 10.dp)
+                        Text(
+                            text = "Dark Mode", style = MaterialTheme.typography.body2.copy(
+                                color = colorResource(
+                                    id = R.color.text_color
+                                ), fontSize = 12.sp
+                            ), modifier = Modifier.weight(1f)
+                        )
+                        SpacerWidth(value = 10.dp)
+                        CustomSwitch(checked = isDarkActive, onCheckedChange = { isDarkActive=it })
+                    }
+                }
+            }
         }
     }
 }
@@ -508,7 +611,6 @@ private fun SquareCard(
     val configuration = LocalConfiguration.current
 
     val cardSize = ((configuration.screenWidthDp / 2) - 30).dp
-    Log.e("TAG", "Account: ${cardSize},${configuration.screenWidthDp}")
     Column(modifier = Modifier
         .clickable {
             onclick()
