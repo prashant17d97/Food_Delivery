@@ -77,14 +77,12 @@ fun Account(navController: NavController) {
     var country by rememberSaveable {
         mutableStateOf("")
     }
-    var originalName = name
-
     val editIcon = if (isEditable) R.drawable.ic_setting_edit else R.drawable.ic_setting
     with(UIElements()) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(top=20.dp,start=10.dp,end=10.dp,bottom=10.dp)
+                .padding(top = 20.dp, start = 10.dp, end = 10.dp, bottom = 10.dp)
                 .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
@@ -130,7 +128,6 @@ fun Account(navController: NavController) {
                     modifier = Modifier.clickable {
                         isEditable = !isEditable
                         isAddressEditable = false
-                        originalName = name
                     })
             }
             SpacerHeight(value = 20.dp)
@@ -144,7 +141,8 @@ fun Account(navController: NavController) {
                     autoCorrect = true
                 ),
                 enabled = isEditable,
-                textStyle = MaterialTheme.typography.body1.copy(textAlign = TextAlign.Center),
+                textStyle = MaterialTheme.typography.body1.copy(textAlign = TextAlign.Center,
+                    color= colorResource(id = R.color.text_color)),
                 colors = TextFieldDefaults.textFieldColors(
                     backgroundColor = Color.Transparent,
                     focusedIndicatorColor = if (isEditable) MaterialTheme.colors.primaryVariant else Color.Transparent,
@@ -229,7 +227,9 @@ fun Account(navController: NavController) {
                 text = stringResource(id = R.string.delivery_address),
                 modifier = Modifier.fillMaxWidth(),
                 textAlign = TextAlign.Start,
-                style = MaterialTheme.typography.body2
+                style = MaterialTheme.typography.body2,
+                color= colorResource(id = R.color.text_color)
+
             )
             SpacerHeight(value = 10.dp)
             Column(
@@ -294,6 +294,9 @@ fun Account(navController: NavController) {
                         ) {
                             OutlinedTextField(
                                 value = addressLine,
+                                textStyle = MaterialTheme.typography.body1.copy(
+                                    color = colorResource(id = R.color.text_color)
+                                ),
                                 onValueChange = { addressLine = it },
                                 placeholder = {
                                     Text(
@@ -310,6 +313,9 @@ fun Account(navController: NavController) {
                             )
                             OutlinedTextField(
                                 value = district,
+                                textStyle = MaterialTheme.typography.body1.copy(
+                                    color = colorResource(id = R.color.text_color)
+                                ),
                                 onValueChange = { district = it },
                                 placeholder = {
                                     Text(
@@ -335,6 +341,9 @@ fun Account(navController: NavController) {
                         ) {
                             OutlinedTextField(
                                 value = state,
+                                textStyle = MaterialTheme.typography.body1.copy(
+                                    color = colorResource(id = R.color.text_color)
+                                ),
                                 onValueChange = { state = it },
                                 placeholder = {
                                     Text(
@@ -349,6 +358,9 @@ fun Account(navController: NavController) {
                             )
                             OutlinedTextField(
                                 value = pinCode,
+                                textStyle = MaterialTheme.typography.body1.copy(
+                                    color = colorResource(id = R.color.text_color)
+                                ),
                                 onValueChange = { pinCode = it },
                                 placeholder = {
                                     Text(
@@ -367,6 +379,9 @@ fun Account(navController: NavController) {
                         SpacerHeight(value = 10.dp)
                         OutlinedTextField(
                             value = country,
+                            textStyle = MaterialTheme.typography.body1.copy(
+                                color = colorResource(id = R.color.text_color)
+                            ),
                             onValueChange = { country = it },
                             placeholder = {
                                 Text(
@@ -442,7 +457,8 @@ fun Account(navController: NavController) {
                 text = stringResource(id = R.string.cards),
                 modifier = Modifier.fillMaxWidth(),
                 textAlign = TextAlign.Start,
-                style = MaterialTheme.typography.body2
+                style = MaterialTheme.typography.body2,
+                color= colorResource(id = R.color.text_color)
             )
             SpacerHeight(value = 10.dp)
             Row(
@@ -474,7 +490,8 @@ fun Account(navController: NavController) {
                         text = stringResource(id = R.string.trans),
                         modifier = Modifier.fillMaxWidth(),
                         textAlign = TextAlign.Start,
-                        style = MaterialTheme.typography.body2
+                        style = MaterialTheme.typography.body2,
+                        color= colorResource(id = R.color.text_color)
                     )
                     SpacerHeight(value = 10.dp)
                     repeat(3) {
@@ -558,7 +575,9 @@ fun Account(navController: NavController) {
                         SpacerWidth(value = 10.dp)
                         Image(
                             painter = painterResource(id = R.drawable.ic_back),
-                            modifier = Modifier.size(20.dp).rotate(180f),
+                            modifier = Modifier
+                                .size(20.dp)
+                                .rotate(180f),
                             contentDescription = "",
                             colorFilter = ColorFilter.tint(colorResource(id = R.color.text_color))
                         )

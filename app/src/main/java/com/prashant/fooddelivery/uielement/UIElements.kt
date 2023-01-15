@@ -785,10 +785,15 @@ class UIElements {
         paddingEnd: Dp = 0.dp,
         onCardClick: () -> Unit = {}
     ) {
+        val configuration = LocalConfiguration.current
+        val itemWidth = ((configuration.screenWidthDp) * 0.9) / if (configuration.orientation ==
+            Configuration.ORIENTATION_PORTRAIT
+        ) 2 else 4
+
         Card(shape = MaterialTheme.shapes.medium,
             modifier = Modifier
                 .clickable { onCardClick() }
-                .width(180.dp)
+                .width(itemWidth.dp)
                 .padding(end = paddingEnd, bottom = 10.dp),
             backgroundColor = colorResource(id = R.color.card_bg)) {
             Column(
@@ -1532,6 +1537,9 @@ class UIElements {
             OutlinedTextField(
                 value = cardNumber,
                 enabled = editCard,
+                textStyle = MaterialTheme.typography.body1.copy(
+                    color = colorResource(id = R.color.text_color)
+                ),
                 keyboardOptions = KeyboardOptions(
                     imeAction = ImeAction.Next,
                     keyboardType = KeyboardType.Number
@@ -1560,6 +1568,9 @@ class UIElements {
             OutlinedTextField(
                 value = cardExp,
                 enabled = editCard,
+                textStyle = MaterialTheme.typography.body1.copy(
+                    color = colorResource(id = R.color.text_color)
+                ),
                 keyboardOptions = KeyboardOptions(
                     imeAction = ImeAction.Next,
                     keyboardType = KeyboardType.Number
@@ -1589,6 +1600,9 @@ class UIElements {
             OutlinedTextField(
                 value = cvv,
                 enabled = editCard,
+                textStyle = MaterialTheme.typography.body1.copy(
+                    color = colorResource(id = R.color.text_color)
+                ),
                 onValueChange = { cvv = it },
                 keyboardOptions = KeyboardOptions(
                     imeAction = ImeAction.Done,
@@ -1686,8 +1700,8 @@ class UIElements {
         isPreVisible: Boolean,
         isNextVisible: Boolean,
         onPrevious: () -> Unit,
-        onNext: () -> Unit={},
-        onSave: () -> Unit={},
+        onNext: () -> Unit = {},
+        onSave: () -> Unit = {},
     ) {
         val width = (LocalConfiguration.current).screenWidthDp
         var feedback by rememberSaveable {
@@ -1702,7 +1716,7 @@ class UIElements {
                     color = colorResource(id = R.color.card_bg), shape = MaterialTheme
                         .shapes.medium
                 )
-                .width(width = (width-20).dp)
+                .width(width = (width - 20).dp)
         ) {
             val (items, feedbackBox, ratingText, rating, button, prev, prevIcon, nextIcon, next) =
                 createRefs()
@@ -1807,7 +1821,7 @@ class UIElements {
                 )
             }
 
-            if (isPreVisible){
+            if (isPreVisible) {
                 Icon(painter = painterResource(id = R.drawable.ic_back), contentDescription = "",
                     modifier = Modifier
                         .padding(start = 20.dp, end = 5.dp, top = 10.dp, bottom = 10.dp)
@@ -1832,7 +1846,7 @@ class UIElements {
             }
 
 
-            if (isNextVisible){
+            if (isNextVisible) {
                 Text(
                     text = "Next dish", style = MaterialTheme.typography.body1.copy(
                         textAlign = TextAlign.Start,
@@ -1867,8 +1881,8 @@ class UIElements {
     @Preview
     @Composable
     fun PreviewUIElement() = LeaveFeedbackCard(
-        isPreVisible =IsVisible.VISIBLE.boolean,
-        isNextVisible =IsVisible.VISIBLE.boolean,
+        isPreVisible = IsVisible.VISIBLE.boolean,
+        isNextVisible = IsVisible.VISIBLE.boolean,
         onPrevious = {},
         onNext = {},
         onSave = {})

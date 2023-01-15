@@ -16,6 +16,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.google.gson.Gson
 import com.prashant.fooddelivery.R
 import com.prashant.fooddelivery.models.RestaurantDishModel
 import com.prashant.fooddelivery.navigation.Screens
@@ -26,7 +27,8 @@ import com.prashant.fooddelivery.uielement.UIElements.Companion.uiElements
 
 @Composable
 fun SavedDishNRestaurant(navController: NavController) {
-    val from = navController.currentBackStackEntry?.arguments?.getString(comingFrom) ?: savedRestaurants
+    val from =
+        navController.currentBackStackEntry?.arguments?.getString(comingFrom) ?: savedRestaurants
     val restaurants = listOf(
         RestaurantDishModel(
             restaurantName = "Market Bistro",
@@ -132,7 +134,8 @@ fun SavedDishNRestaurant(navController: NavController) {
                         onCardClick = {
                             navController.navigate(Screens.ItemPage.route)
                         },
-                        paddingEnd = 0.dp)
+                        paddingEnd = 0.dp
+                    )
                 }
             }
             AnimatedVisibility(visible = from == savedRestaurants) {
@@ -145,11 +148,15 @@ fun SavedDishNRestaurant(navController: NavController) {
                     RestaurantDishCard(
                         it,
                         isBottomRowRequire = false,
-
                         onCardClick = {
-                            navController.navigate(Screens.RestaurantsPage.route)
+                            navController.navigate(
+                                Screens.RestaurantsPage.restaurantPageRequireArgs(
+                                    Gson().toJson(it)
+                                )
+                            )
                         },
-                    paddingEnd = 0.dp)
+                        paddingEnd = 0.dp
+                    )
                 }
             }
         }
