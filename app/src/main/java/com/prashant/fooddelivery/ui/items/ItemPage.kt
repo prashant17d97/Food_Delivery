@@ -321,7 +321,7 @@ fun ItemPage(navController: NavController) {
             LazyRow(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
+                horizontalArrangement = Arrangement.Start
             ) {
                 items(count = restaurants.size, itemContent = { index ->
                     RestaurantDishCard(

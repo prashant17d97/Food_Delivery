@@ -30,7 +30,6 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.*
@@ -928,7 +927,8 @@ class UIElements {
                     contentDescription = "avatar",
                     contentScale = ContentScale.Crop,            // crop the image if it's not a square
                     modifier = Modifier
-                        .size(64.dp)
+                        .width(64.dp)
+                        .height(64.dp)
                         .clip(CircleShape)// clip to the circle shape
                         .weight(0.7f),
                     alignment = Alignment.Center
@@ -977,9 +977,9 @@ class UIElements {
 
     @Composable
     fun CheckoutItemCard(
+        modifier: Modifier = Modifier,
         isCheckOutPage: Boolean = true,
         color: Color = MaterialTheme.colors.primaryVariant,
-        modifier: Modifier = Modifier,
         onCardClick: () -> Unit = {}
     ) {
         Column(
@@ -1358,6 +1358,7 @@ class UIElements {
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .fillMaxWidth()
+                .clickable { onClick(true) }
         ) {
             Column(
                 verticalArrangement = Arrangement.Top,
@@ -1477,7 +1478,6 @@ class UIElements {
         isEditable: Boolean = true,
         click: () -> Unit
     ) {
-        val localDensity = LocalDensity.current
         var cardNumber by rememberSaveable {
             mutableStateOf("")
         }
@@ -1501,9 +1501,6 @@ class UIElements {
                     color = colorResource(id = R.color.card_bg),
                     shape = MaterialTheme.shapes.medium
                 )
-//                .onGloballyPositioned { coordinates ->
-//                    height(with(localDensity) { coordinates.size.height.toDp() })
-//                }
                 .padding(10.dp)
         ) {
             val (icon, close, button, card, date, cvvConstraint) = createRefs()
@@ -1642,6 +1639,7 @@ class UIElements {
                 .padding(top = 10.dp)) {
                 Button(onClick = {
                     editCard = false
+                    click()
                 }) {
                     Text(text = "Save")
                     SpacerWidth(value = 10.dp)
@@ -1880,12 +1878,7 @@ class UIElements {
 
     @Preview
     @Composable
-    fun PreviewUIElement() = LeaveFeedbackCard(
-        isPreVisible = IsVisible.VISIBLE.boolean,
-        isNextVisible = IsVisible.VISIBLE.boolean,
-        onPrevious = {},
-        onNext = {},
-        onSave = {})
+    fun PreviewUIElement(){}
 }
 
 

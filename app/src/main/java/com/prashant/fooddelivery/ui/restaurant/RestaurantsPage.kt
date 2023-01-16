@@ -83,7 +83,7 @@ fun RestaurantsPage(navController: NavController) {
         )
     )
     val menus = listOf(
-        /*RestaurantDishModel(
+        RestaurantDishModel(
             restaurantName = "Wavos rancheros",
             restaurantOffers = "",
             stars = 4.0f,
@@ -91,7 +91,7 @@ fun RestaurantsPage(navController: NavController) {
             sales = 412,
             icon = R.drawable.wavos,
             isRestaurant = false
-        ),*/
+        ),
         RestaurantDishModel(
             restaurantName = "Enchiladas",
             restaurantOffers = "",
@@ -102,6 +102,15 @@ fun RestaurantsPage(navController: NavController) {
             isRestaurant = false
         ),
         RestaurantDishModel(
+            restaurantName = "Wavos rancheros",
+            restaurantOffers = "",
+            stars = 4.0f,
+            comments = 312,
+            sales = 412,
+            icon = R.drawable.wavos,
+            isRestaurant = false
+        ),
+        RestaurantDishModel(
             restaurantName = "Pico de gallo",
             restaurantOffers = "",
             stars = 4.0f,
@@ -109,7 +118,16 @@ fun RestaurantsPage(navController: NavController) {
             sales = 412,
             icon = R.drawable.img_pico_de,
             isRestaurant = false
-        )
+        ),
+        RestaurantDishModel(
+            restaurantName = "Enchiladas",
+            restaurantOffers = "",
+            stars = 4.0f,
+            comments = 312,
+            sales = 412,
+            icon = R.drawable.img_ench,
+            isRestaurant = false
+        ),
     )
     val restaurantDetail =
         navController.currentBackStackEntry?.arguments?.getString(restaurantPageArgs)?.let {
@@ -296,7 +314,7 @@ fun RestaurantsPage(navController: NavController) {
             LazyRow(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
+                horizontalArrangement = Arrangement.Start
             ) {
                 items(count = restaurants.size, itemContent = { index ->
                     RestaurantDishCard(
@@ -320,54 +338,14 @@ fun RestaurantsPage(navController: NavController) {
             )
             Spacer(modifier = Modifier.height(10.dp))
 
-            LazyRow(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween,
-                content = {
-                    items(count = menus.size, itemContent = { item ->
-                        RestaurantDishCard(
-                            menus[item],
-                            isBottomRowRequire = true,
-
-                            onCardClick = {
-                                navController.navigate(Screens.ItemPage.route)
-                            })
+            VerticalGridCells(list = menus) {
+                RestaurantDishCard(
+                    it,
+                    isBottomRowRequire = true,
+                    onCardClick = {
+                        navController.navigate(Screens.ItemPage.route)
                     })
-                }
-            )
-            LazyRow(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween,
-                content = {
-                    items(count = menus.size, itemContent = { item ->
-                        RestaurantDishCard(
-                            menus[item],
-                            isBottomRowRequire = true,
-
-                            onCardClick = {
-                                navController.navigate(Screens.ItemPage.route)
-                            })
-                    })
-                }
-            )
-            LazyRow(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween,
-                content = {
-                    items(count = menus.size, itemContent = { item ->
-                        RestaurantDishCard(
-                            menus[item],
-                            isBottomRowRequire = true,
-
-                            onCardClick = {
-                                navController.navigate(Screens.ItemPage.route)
-                            })
-                    })
-                }
-            )
+            }
         }
     }
 
