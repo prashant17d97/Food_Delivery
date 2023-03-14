@@ -364,8 +364,6 @@ fun PopUp(dismiss: () -> Unit, openDialog: Boolean, onClick: (Boolean) -> Unit) 
 
 @Preview
 @Composable
-fun CheckoutPreView() = Checkout(navController = rememberNavController())/*PopUp(dismiss = {},
-    openDialog = false,
-    onClick = {})*/
+fun CheckoutPreView() = Checkout(navController = rememberNavController())
 
 

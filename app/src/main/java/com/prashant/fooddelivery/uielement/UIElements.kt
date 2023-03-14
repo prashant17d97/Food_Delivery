@@ -62,6 +62,34 @@ class UIElements {
         val uiElements = UIElements()
     }
 
+    /**
+
+    [CustomPasswordTextField] composable function that creates a custom password TextField with a leading icon and a password visibility toggle button.
+
+    The function takes in the current password as a String, an onValueChange function that is called when the password is changed,
+
+    and optional parameters for customizing the TextField's behavior and appearance.
+
+     *@param password a required String value representing the current password displayed in the TextField.
+
+     *@param onValueChange a required lambda function that is called whenever the value of the TextField is changed, passing the new password String.
+
+     *@param singleLine an optional Boolean value that specifies whether the TextField should be single line or multi-line. Default is true (single line).
+
+     *@param placeholderText an optional String value representing the placeholder text to be displayed when the TextField is empty. Default is "Password".
+
+     *@param placeholderColor an optional Color value representing the color of the placeholder text. Default is white.
+
+     *@param imeAction an optional ImeAction value representing the keyboard action to take when the TextField's keyboard is used. Default is ImeAction.Done.
+
+     *@param keyboardType an optional KeyboardType value representing the type of keyboard to display. Default is KeyboardType.Password.
+
+     *@param onGO an optional lambda function that is called when the keyboard's "Go" button is pressed. Default is an empty function.
+
+     *@param leadingIcon an optional ImageVector representing the leading icon to display in the TextField. Default is an open lock icon.
+
+     *@return a TextField composable with a custom background, shape, leading icon, password visibility toggle button, and password text.
+     */
     @Composable
     fun CustomPasswordTextField(
         password: String,
@@ -145,8 +173,26 @@ class UIElements {
 
 
     /**
-     * [CustomTextField]
-     * */
+     * [CustomTextField] composable function to render a customized text field with leading and trailing icons, background color, placeholder text, and other configurations.
+     *@param phone The current value of the phone number field.
+     *@param onValueChange A callback function to be triggered when the value of the phone number field changes.
+     *@param keyboardType The type of keyboard to show, default is KeyboardType.Phone.
+     *@param imeAction The action to take when the IME button is clicked, default is ImeAction.Next.
+     *@param capitalization The type of capitalization to apply, default is KeyboardCapitalization.None.
+     *@param charLimit The maximum character limit allowed in the field, default is 10.
+     *@param textStyle The text style to apply, default is white color text.
+     *@param backGround The background color to apply, default is semi-transparent white.
+     *@param singleLine Determines if the text field should be limited to a single line.
+     *@param trailingIconRequire Determines if a trailing icon should be displayed, default is false.
+     *@param placeHolderColor The color to use for the placeholder text, default is white.
+     *@param placeHolder The text to display as a placeholder when the field is empty, default is "Phone".
+     *@param action A callback function to be triggered when the done button is clicked.
+     *@param onTrailingClick A callback function to be triggered when the trailing icon is clicked.
+     *@param leadingIcon The leading icon to display, default is a phone icon.
+     *@param leadingIconColor The color to use for the leading icon, default is white.
+     *@param trailingIcon The trailing icon to display, default is a phone icon.
+     *@param trailingIconColor The color to use for the trailing icon, default is white.
+     */
     @Composable
     fun CustomTextField(
         phone: String,
@@ -282,9 +328,19 @@ class UIElements {
     }
 
     /**
-     * This [ImageBackground] compose will return the full screen with image background with column Scope.
-     * It will require an image in painterResource
-     * */
+     * [ImageBackground] composable function that displays an image as a background with a foreground column of content.
+     *@param painter The [Painter] object that represents the image to be displayed as the background.
+     *@param columnStartPadding The padding value for the start of the foreground column.
+     *@param columnEndPadding The padding value for the end of the foreground column.
+     *@param columnTopPadding The padding value for the top of the foreground column.
+     *@param columnBottomPadding The padding value for the bottom of the foreground column.
+     *@param isBackVisible The visibility state of a back button placed at the top left corner of the foreground column.
+     *@param backPaddingModifier The padding value for the back button.
+     *@param columnVerticalArrangement The vertical arrangement of the content within the foreground column.
+     *@param columnHorizontalAlign The horizontal alignment of the content within the foreground column.
+     *@param backClick The click listener for the back button.
+     *@param content The composable function that defines the content of the foreground column.*/
+
     @Composable
     fun ImageBackground(
         painter: Painter,
@@ -369,6 +425,14 @@ class UIElements {
 
     }
 
+    /**
+    [DynamicOTP] composable function that renders a dynamic OTP input field.
+     *@param size The number of input fields to be displayed.
+
+     *@param otp A function that takes a String and an Int parameter representing the entered OTP value and its index respectively.
+
+     *@return A composable UI that renders the dynamic OTP input fields.
+     */
     @Composable
     fun DynamicOTP(size: Int, otp: (String, Int) -> Unit) {
         val focusManager = LocalFocusManager.current
@@ -453,6 +517,16 @@ class UIElements {
         }
     }
 
+
+    /**
+    [GradientButtonNoRipple] composable function that creates a GradientButton with no ripple effect. The button can have an optional leading and trailing icon,
+    along with a text displayed on it. The button is clickable and calls a function when clicked.
+     *@param leadingIcon an optional Int value that represents the drawable resource ID of the leading icon to be displayed on the button. Default is 0 (no icon).
+     *@param trailingIcon an optional Int value that represents the drawable resource ID of the trailing icon to be displayed on the button. Default is 0 (no icon).
+     *@param textOnButton a required String value that represents the text to be displayed on the button.
+     *@param onClick a required lambda function that will be called when the button is clicked.
+     *@return a Row composable with a gradient background, the specified icon(s), and text on the button. The button is clickable and calls a function when clicked.
+     */
     @Composable
     fun GradientButtonNoRipple(
         leadingIcon: Int = 0,
@@ -506,6 +580,31 @@ class UIElements {
 
     }
 
+
+    /**
+    [SearchCard] composable function that displays a card with a search bar, which provides search suggestions while typing.
+    *@param value The current value of the search bar.
+    *@param onValueChange A function that takes a string and is called whenever the value of the search bar changes.
+    *@param keyboardType The type of keyboard to use for the search bar. The default is set to KeyboardType.Phone.
+    *@param imeAction The type of action to take when the IME action button is pressed. The default is set to ImeAction.Next.
+    *@param capitalization The type of capitalization to use for the search bar. The default is set to KeyboardCapitalization.None.
+    *@param charLimit The maximum number of characters allowed in the search bar. The default is set to 10.
+    *@param textStyle The style to use for the text in the search bar. The default is set to white.
+    *@param backGround The background color of the search bar card. The default is set to the card_bg color resource.
+    *@param singleLine A boolean indicating whether the search bar should be limited to a single line. The default is set to true.
+    *@param shape The shape to use for the search bar card. The default is set to MaterialTheme.shapes.medium.
+    *@param trailingIconRequire A boolean indicating whether a trailing icon is required for the search bar. The default is set to false.
+    *@param placeHolderColor The color of the search bar placeholder text. The default is set to white.
+    *@param placeHolder The text to display as the search bar placeholder. The default is set to "phone".
+    *@param action A function to be executed when the IME action button is pressed. The default is set to an empty function.
+    *@param onTrailingClick A function to be executed when the trailing icon is clicked. The default is set to an empty function.
+    *@param onCardClick A function to be executed when the search bar card is clicked. The default is set to an empty function.
+    *@param enabled A boolean indicating whether the search bar should be enabled. The default is set to true.
+    *@param leadingIcon An ImageVector to use as the search bar leading icon. The default is set to the phone_icon.
+    *@param leadingIconColor The color of the search bar leading icon. The default is set to white.
+    *@param trailingIcon An ImageVector to use as the search bar trailing icon. The default is set to the filter_icon.
+    *@param trailingIconColor The color of the search bar trailing icon. The default is set to white.
+     */
     @Composable
     fun SearchCard(
         value: String,
@@ -700,6 +799,12 @@ class UIElements {
         }
     }
 
+    /**
+
+    Displays a row with dish name and distance in kilometers for a suggestion.
+    *@param dataModel SuggestionModel representing the suggestion data to be displayed.
+    *@param value Lambda function to be executed when the suggestion row is clicked.
+     */
     @Composable
     fun SearchRecentSuggestions(dataModel: SuggestionModel, value: (String) -> Unit) {
         Row(horizontalArrangement = Arrangement.SpaceBetween,
@@ -747,6 +852,11 @@ class UIElements {
         }
     }
 
+    /**
+
+    [CategoryCard] composable function that displays a category card.
+    *@param categoryModel the data model representing the category.
+     */
     @Composable
     fun CategoryCard(categoryModel: CategoriesModel) {
         Card(
@@ -777,6 +887,14 @@ class UIElements {
         }
     }
 
+    /**
+
+    [RestaurantDishCard] composable function that displays a card view representing a restaurant dish.
+    *@param restaurantDishModel The restaurant dish model to display.
+    *@param isBottomRowRequire Whether to display a row at the bottom of the card.
+    *@param paddingEnd The padding to apply at the end of the card.
+    *@param onCardClick The callback function to be invoked when the card is clicked.
+     */
     @Composable
     fun RestaurantDishCard(
         restaurantDishModel: RestaurantDishModel,
@@ -975,6 +1093,14 @@ class UIElements {
         }
     }
 
+    /**
+
+    [CheckoutItemCard] function displays a card with information about an item in the checkout list.
+    *@param modifier modifier to be applied to the card.
+    *@param isCheckOutPage boolean indicating if the card is being displayed in the checkout page.
+    *@param color background color of the card.
+    *@param onCardClick callback to be called when the card is clicked.
+     */
     @Composable
     fun CheckoutItemCard(
         modifier: Modifier = Modifier,
@@ -1125,10 +1251,6 @@ class UIElements {
             })
         }
     }
-
-    /**private fun dpToPx(context: Context, dpValue: Float): Float {
-    return dpValue * context.resources.displayMetrics.density
-    }*/
 
 
     @Composable
@@ -1878,7 +2000,8 @@ class UIElements {
 
     @Preview
     @Composable
-    fun PreviewUIElement(){}
+    fun PreviewUIElement() {
+    }
 }
 
 
