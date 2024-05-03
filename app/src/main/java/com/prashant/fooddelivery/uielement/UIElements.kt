@@ -230,7 +230,7 @@ class UIElements {
                                     focusDirection = FocusDirection.Next
                                 )
                             }
-                            ImeAction.Done, ImeAction.Go, ImeAction.Search, ImeAction.Search -> {
+                            ImeAction.Done, ImeAction.Go, ImeAction.Search -> {
                                 action()
                                 keyBoardControl?.hide()
                                 focusManager.clearFocus(true)
@@ -600,7 +600,7 @@ class UIElements {
                                             focusDirection = FocusDirection.Next
                                         )
                                     }
-                                    ImeAction.Done, ImeAction.Go, ImeAction.Search, ImeAction.Search -> {
+                                    ImeAction.Done, ImeAction.Go, ImeAction.Search -> {
                                         action()
                                         keyBoardControl?.hide()
                                         focusManager.clearFocus(true)
