@@ -6,10 +6,13 @@ import com.prashant.fooddelivery.R
 /**
  * Arguments Ids*/
 const val comingFrom = "ComingFrom"
-const val RestPassword = "ForgotPassword"
-const val RegistrationScreen = "Registration"
+const val restPassword = "ForgotPassword"
+const val registrationScreen = "Registration"
 const val name = "Name"
+const val savedDishes = "Saved Dishes"
+const val savedRestaurants = "Saved Restaurants"
 const val restaurantPageArgs = "RestaurantPageArgs"
+const val feedbackList = "FeedbackList"
 
 
 /**
@@ -31,10 +34,14 @@ const val welcome = "Welcome"
 const val home = "Home"
 const val tracking = "Tracking"
 const val checkout = "Checkout"
+const val orders = "Orders"
 const val account = "Account"
 const val search = "Search"
 const val restaurantsPage = "RestaurantsPage"
 const val itemPage = "ItemPage"
+const val savedDishNRestaurant = "SavedDishNRestaurant"
+const val feedBacks = "FeedBacks"
+const val transactions = "Transactions"
 
 sealed class Screens(var title: String, var icon: Int = 0, var route: String) {
 
@@ -44,8 +51,14 @@ sealed class Screens(var title: String, var icon: Int = 0, var route: String) {
             return "$home/$demo"
         }
     }*/
-    object Tracking : Screens(tracking, R.drawable.map_icon, route = tracking)
+    object Tracking : Screens(tracking, R.drawable.map_icon, route = "$tracking/{$comingFrom}") {
+        fun going(comingFrom: String): String {
+            return "$tracking/$comingFrom"
+        }
+    }
+
     object Checkout : Screens(checkout, R.drawable.checkout_icon, route = checkout)
+    object Orders : Screens(orders,  route = orders)
     object Account : Screens(account, R.drawable.user_icon, route = account)
     object Search : Screens(search, route = search)
 
@@ -73,9 +86,22 @@ sealed class Screens(var title: String, var icon: Int = 0, var route: String) {
         }
     }
 
+    object SavedDishNRestaurant :
+        Screens(title = savedDishNRestaurant, route = "$savedDishNRestaurant/{$comingFrom}") {
+        fun nameArgs(comingFrom: String): String {
+            return "$savedDishNRestaurant/$comingFrom"
+        }
+    }
+
     object ItemPage : Screens(title = itemPage, route = itemPage) /*{
         fun nameArgs(name: String): String {
             return "$welcome/$name"
         }
     }*/
+    object FeedBacks : Screens(title = feedBacks, route = "$feedBacks/{$feedbackList}"){
+        fun list(list: String): String {
+            return "$feedBacks/$list"
+        }
+    }
+    object Transactions : Screens(title = transactions, route = transactions)
 }

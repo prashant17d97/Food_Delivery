@@ -16,6 +16,7 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -35,7 +36,7 @@ import com.prashant.fooddelivery.methods.CommonMethod.fromJson
 import com.prashant.fooddelivery.models.RestaurantDishModel
 import com.prashant.fooddelivery.navigation.Screens
 import com.prashant.fooddelivery.navigation.restaurantPageArgs
-import com.prashant.fooddelivery.uielement.UIElements
+import com.prashant.fooddelivery.uielement.UIElements.Companion.uiElements
 
 @Composable
 fun RestaurantsPage(navController: NavController) {
@@ -59,7 +60,7 @@ fun RestaurantsPage(navController: NavController) {
             stars = 4.0f,
             comments = 312,
             sales = 412,
-            icon = R.drawable.img_wavos,
+            icon = R.drawable.wavos,
             isRestaurant = false
         ),
         RestaurantDishModel(
@@ -82,15 +83,15 @@ fun RestaurantsPage(navController: NavController) {
         )
     )
     val menus = listOf(
-        /*RestaurantDishModel(
+        RestaurantDishModel(
             restaurantName = "Wavos rancheros",
             restaurantOffers = "",
             stars = 4.0f,
             comments = 312,
             sales = 412,
-            icon = R.drawable.img_wavos,
+            icon = R.drawable.wavos,
             isRestaurant = false
-        ),*/
+        ),
         RestaurantDishModel(
             restaurantName = "Enchiladas",
             restaurantOffers = "",
@@ -101,6 +102,15 @@ fun RestaurantsPage(navController: NavController) {
             isRestaurant = false
         ),
         RestaurantDishModel(
+            restaurantName = "Wavos rancheros",
+            restaurantOffers = "",
+            stars = 4.0f,
+            comments = 312,
+            sales = 412,
+            icon = R.drawable.wavos,
+            isRestaurant = false
+        ),
+        RestaurantDishModel(
             restaurantName = "Pico de gallo",
             restaurantOffers = "",
             stars = 4.0f,
@@ -108,7 +118,16 @@ fun RestaurantsPage(navController: NavController) {
             sales = 412,
             icon = R.drawable.img_pico_de,
             isRestaurant = false
-        )
+        ),
+        RestaurantDishModel(
+            restaurantName = "Enchiladas",
+            restaurantOffers = "",
+            stars = 4.0f,
+            comments = 312,
+            sales = 412,
+            icon = R.drawable.img_ench,
+            isRestaurant = false
+        ),
     )
     val restaurantDetail =
         navController.currentBackStackEntry?.arguments?.getString(restaurantPageArgs)?.let {
@@ -122,7 +141,8 @@ fun RestaurantsPage(navController: NavController) {
     }
     val icon =
         if (isFavourite) painterResource(R.drawable.like_icon_fill) else painterResource(R.drawable.like_icon)
-    with(UIElements()) {
+
+    with(uiElements) {
         Column(
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -237,12 +257,15 @@ fun RestaurantsPage(navController: NavController) {
                             )
                         )
                         Spacer(modifier = Modifier.height(5.dp))
-                        Column(modifier = Modifier
-                            .animateContentSize(animationSpec = tween(100))
-                            .clickable(
-                                interactionSource = remember { MutableInteractionSource() },
-                                indication = null
-                            ) { showMore = !showMore }) {
+                        Column(
+                            verticalArrangement = Arrangement.Top,
+                            horizontalAlignment = Alignment.End,
+                            modifier = Modifier
+                                .animateContentSize(animationSpec = tween(100))
+                                .clickable(
+                                    interactionSource = remember { MutableInteractionSource() },
+                                    indication = null
+                                ) { showMore = !showMore }) {
 
                             // if showMore is true, the Text will expand
                             // Else Text will be restricted to 3 Lines of display
@@ -265,6 +288,14 @@ fun RestaurantsPage(navController: NavController) {
                                     overflow = TextOverflow.Ellipsis
                                 )
                             }
+
+                            Image(
+                                painter = painterResource(R.drawable.ic_back),
+                                contentDescription = "expand trigger",
+                                modifier = Modifier
+                                    .rotate(if (showMore) 90f else -90f)
+                                    .padding(end = 10.dp)
+                            )
                         }
                     }
                 }
@@ -283,12 +314,13 @@ fun RestaurantsPage(navController: NavController) {
             LazyRow(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
+                horizontalArrangement = Arrangement.Start
             ) {
                 items(count = restaurants.size, itemContent = { index ->
                     RestaurantDishCard(
                         restaurants[index],
                         isBottomRowRequire = true,
+                        paddingEnd = if (index == restaurants.size - 1) 0.dp else 10.dp,
                         onCardClick = {
                             navController.navigate(Screens.ItemPage.route)
                         })
@@ -306,54 +338,14 @@ fun RestaurantsPage(navController: NavController) {
             )
             Spacer(modifier = Modifier.height(10.dp))
 
-            LazyRow(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween,
-                content = {
-                    items(count = menus.size, itemContent = { item ->
-                        RestaurantDishCard(
-                            menus[item],
-                            isBottomRowRequire = true,
-                            isSpan = true,
-                            onCardClick = {
-                                navController.navigate(Screens.ItemPage.route)
-                            })
+            VerticalGridCells(list = menus) {
+                RestaurantDishCard(
+                    it,
+                    isBottomRowRequire = true,
+                    onCardClick = {
+                        navController.navigate(Screens.ItemPage.route)
                     })
-                }
-            )
-            LazyRow(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween,
-                content = {
-                    items(count = menus.size, itemContent = { item ->
-                        RestaurantDishCard(
-                            menus[item],
-                            isBottomRowRequire = true,
-                            isSpan = true,
-                            onCardClick = {
-                                navController.navigate(Screens.ItemPage.route)
-                            })
-                    })
-                }
-            )
-            LazyRow(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween,
-                content = {
-                    items(count = menus.size, itemContent = { item ->
-                        RestaurantDishCard(
-                            menus[item],
-                            isBottomRowRequire = true,
-                            isSpan = true,
-                            onCardClick = {
-                                navController.navigate(Screens.ItemPage.route)
-                            })
-                    })
-                }
-            )
+            }
         }
     }
 

@@ -12,6 +12,8 @@
     <color name="filter_divider">#D8E1E3</color>
     <color name="card_bg">@color/white</color>
     <color name="text_color">#566265</color>
+    <color name="inActiveColor">#D4DBDC</color>
+    <color name="activeColor">#566265</color>
     <color name="bnm_non_selected_icon_color">#566265</color>
     <color name="primary_color">#FB7500</color>
     <color name="price_color">#4BB000</color>

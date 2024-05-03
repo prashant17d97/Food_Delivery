@@ -1,0 +1,26 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="51dp"
+    android:height="51dp"
+    android:viewportWidth="51"
+    android:viewportHeight="51">
+  <path
+      android:pathData="M25.5,51C39.583,51 51,39.583 51,25.5C51,11.417 39.583,0 25.5,0C11.417,0 0,11.417 0,25.5C0,39.583 11.417,51 25.5,51Z"
+      android:fillColor="@color/card_bg"
+      android:fillType="evenOdd"/>
+  <path
+      android:pathData="M39,27.955V23.045H34.997C34.765,22.147 34.411,21.3 33.951,20.52L36.781,17.69L33.31,14.219L30.48,17.049C29.7,16.589 28.853,16.235 27.955,16.003V12H23.045V16.003C22.147,16.235 21.3,16.589 20.52,17.049L17.69,14.219L14.219,17.69L17.049,20.52C16.589,21.3 16.235,22.147 16.003,23.045H12V27.955H16.003C16.235,28.853 16.589,29.7 17.049,30.48L14.219,33.31L17.69,36.781L20.52,33.951C21.299,34.411 22.147,34.765 23.045,34.997V39H27.955V34.997C28.853,34.765 29.7,34.411 30.48,33.951L33.31,36.781L36.781,33.31L33.951,30.48C34.411,29.701 34.765,28.853 34.997,27.955H39Z"
+      android:strokeLineJoin="round"
+      android:strokeWidth="2.5"
+      android:fillColor="#00000000"
+      android:fillType="evenOdd"
+      android:strokeColor="@color/_FB7500"
+      android:strokeLineCap="round"/>
+  <path
+      android:pathData="M25.5,29C27.433,29 29,27.433 29,25.5C29,23.567 27.433,22 25.5,22C23.567,22 22,23.567 22,25.5C22,27.433 23.567,29 25.5,29Z"
+      android:strokeLineJoin="round"
+      android:strokeWidth="2.5"
+      android:fillColor="#00000000"
+      android:fillType="evenOdd"
+      android:strokeColor="@color/_FB7500"
+      android:strokeLineCap="round"/>
+</vector>

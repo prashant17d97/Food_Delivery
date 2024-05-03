@@ -1,5 +1,7 @@
 package com.prashant.fooddelivery.ui.home
 
+import android.app.Activity
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
@@ -16,6 +18,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -25,10 +28,11 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.google.gson.Gson
 import com.prashant.fooddelivery.R
+import com.prashant.fooddelivery.enums.CellCounts
 import com.prashant.fooddelivery.models.CategoriesModel
 import com.prashant.fooddelivery.models.RestaurantDishModel
 import com.prashant.fooddelivery.navigation.Screens
-import com.prashant.fooddelivery.uielement.UIElements
+import com.prashant.fooddelivery.uielement.UIElements.Companion.uiElements
 
 @Composable
 fun Home(navController: NavController) {
@@ -93,7 +97,7 @@ fun Home(navController: NavController) {
             sales = 1286,
             icon = R.drawable.salmon,
             isRestaurant = false
-        )/*,
+        ),
         RestaurantDishModel(
             restaurantName = "Philadelphia rolls\n with salmon",
             restaurantOffers = "",
@@ -111,15 +115,18 @@ fun Home(navController: NavController) {
             sales = 1286,
             icon = R.drawable.salmon,
             isRestaurant = false
-        )*/
+        )
     )
-
+    val activity = (LocalContext.current as? Activity)
+    BackHandler {
+        activity?.finishAffinity()
+    }
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(10.dp)
     ) {
-        with(UIElements()) {
+        with(uiElements) {
             SearchCard(
                 value = searchValue,
                 onValueChange = { searchValue = it },
@@ -137,7 +144,7 @@ fun Home(navController: NavController) {
                 }, enabled = false
             )
         }
-        with(UIElements()) {
+        with(uiElements) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -181,7 +188,7 @@ fun Home(navController: NavController) {
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     items(count = restaurants.size, itemContent = { index ->
-                        RestaurantDishCard(restaurants[index], onCardClick = {
+                        RestaurantDishCard(restaurants[index], paddingEnd = if (index == restaurants.size - 1) 0.dp else 10.dp, onCardClick = {
                             navController.navigate(
                                 Screens.RestaurantsPage.restaurantPageRequireArgs(
                                     Gson().toJson(restaurants[index])
@@ -202,43 +209,18 @@ fun Home(navController: NavController) {
                 )
                 Spacer(modifier = Modifier.height(10.dp))
 
-                LazyRow(
+                VerticalGridCells(
+                    spanCount = CellCounts.TWO,
+                    list = dishes,
                     modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    content = {
-                        items(count = dishes.size, itemContent = { item ->
-                            RestaurantDishCard(dishes[item], isBottomRowRequire = true,
-                                isSpan=true,onCardClick = {
+                    itemScope = {
+                        RestaurantDishCard(
+                            it,
+                            isBottomRowRequire = true,
+                            onCardClick = {
                                 navController.navigate(Screens.ItemPage.route)
                             })
-                        })
-                    }
-                )
-                LazyRow(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    content = {
-                        items(count = dishes.size, itemContent = { item ->
-                            RestaurantDishCard(dishes[item], isBottomRowRequire = true,isSpan=true, onCardClick = {
-                                navController.navigate(Screens.ItemPage.route)
-                            })
-                        })
-                    }
-                )
-                LazyRow(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    content = {
-                        items(count = dishes.size, itemContent = { item ->
-                            RestaurantDishCard(dishes[item], isBottomRowRequire = true,isSpan=true, onCardClick = {
-                                navController.navigate(Screens.ItemPage.route)
-                            })
-                        })
-                    }
-                )
+                    })
             }
         }
     }

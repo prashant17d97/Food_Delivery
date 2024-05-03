@@ -22,11 +22,11 @@ import com.prashant.fooddelivery.R
 import com.prashant.fooddelivery.enums.IsVisible
 import com.prashant.fooddelivery.navigation.Screens
 import com.prashant.fooddelivery.navigation.name
-import com.prashant.fooddelivery.uielement.UIElements
+import com.prashant.fooddelivery.uielement.UIElements.Companion.uiElements
 
 @Composable
 fun Welcome(navController: NavController) {
-    with(UIElements()) {
+    with(uiElements) {
         ImageBackground(
             painter = painterResource(
                 id = R.drawable.welcome_bg

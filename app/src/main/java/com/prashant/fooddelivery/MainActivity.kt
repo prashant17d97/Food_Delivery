@@ -38,18 +38,6 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         installSplashScreen()
         context = WeakReference(this)
-        /*.apply {
-                this.setOnExitAnimationListener { viewProvider ->
-                    viewProvider.iconView
-                        .animate()
-                        .setDuration(500L)
-                        .alpha(0f)
-                        .withEndAction {
-                            viewProvider.remove()
-
-                        }.start()
-                }
-            }*/
         isVisibility.observe(this) {
             window.navigationBarColor = if (it) {
                 this.getColor(R.color.card_bg)
@@ -104,6 +92,8 @@ private fun showBnm(navHostController: NavHostController): Boolean {
         Screens.Tracking.route -> true
         Screens.Checkout.route -> true
         Screens.Account.route -> true
+        Screens.ItemPage.route -> true
+        Screens.RestaurantsPage.route -> true
         else -> false
     }
 }

@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -26,13 +25,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.gowtham.ratingbar.RatingBar
 import com.gowtham.ratingbar.RatingBarConfig
 import com.gowtham.ratingbar.RatingBarStyle
 import com.prashant.fooddelivery.R
+import com.prashant.fooddelivery.enums.CellCounts
 import com.prashant.fooddelivery.models.RestaurantDishModel
 import com.prashant.fooddelivery.navigation.Screens
-import com.prashant.fooddelivery.uielement.UIElements
+import com.prashant.fooddelivery.uielement.UIElements.Companion.uiElements
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -44,10 +45,8 @@ fun Search(navController: NavController) {
     var slider by rememberSaveable {
         mutableStateOf(0f)
     }
-    val sheetState = rememberModalBottomSheetState(
-        initialValue = ModalBottomSheetValue.Hidden,
-        confirmStateChange = { it != ModalBottomSheetValue.HalfExpanded }
-    )
+    val sheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden,
+        confirmStateChange = { it != ModalBottomSheetValue.HalfExpanded })
     val coroutineScope = rememberCoroutineScope()
 
     BackHandler(sheetState.isVisible) {
@@ -62,8 +61,7 @@ fun Search(navController: NavController) {
             sales = 1367,
             icon = R.drawable.pepperoni_pizza,
             isRestaurant = false
-        ),
-        RestaurantDishModel(
+        ), RestaurantDishModel(
             restaurantName = "Philadelphia rolls\nwith salmon",
             restaurantOffers = "",
             stars = 4.0f,
@@ -99,7 +97,7 @@ fun Search(navController: NavController) {
             .fillMaxSize()
             .padding(10.dp)
     ) {
-        with(UIElements()) {
+        with(uiElements) {
             SearchCard(
                 value = searchValue,
                 onValueChange = { searchValue = it },
@@ -132,44 +130,29 @@ fun Search(navController: NavController) {
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Spacer(modifier = Modifier.height(10.dp))
-            LazyRow(
+            uiElements.VerticalGridCells(spanCount = CellCounts.TWO,
+                list = dishes,
                 modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween,
-                content = {
-                    items(count = dishes.size, itemContent = { item ->
-                        UIElements().RestaurantDishCard(dishes[item], isBottomRowRequire = true,isSpan=true, onCardClick = {
+                itemScope = {
+                    uiElements.RestaurantDishCard(it, isBottomRowRequire = true,
+
+                        onCardClick = {
                             navController.navigate(Screens.ItemPage.route)
                         })
-                    })
-                }
-            )
-            LazyRow(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween,
-                content = {
-                    items(count = dishes.size, itemContent = { item ->
-                        UIElements().RestaurantDishCard(dishes[item], isBottomRowRequire = true,isSpan=true, onCardClick = {
-                            navController.navigate(Screens.ItemPage.route)
-                        })
-                    })
-                }
-            )
+                })
         }
     }
     ModalBottomSheetLayout(
         sheetState = sheetState,
         sheetContent = {
-            BottomSheet(
-                rating = rating,
+            BottomSheet(rating = rating,
                 slider = slider,
+                state = sheetState.isVisible,
                 sliderValues = { slider = it },
                 ratingValues = {
                     rating = it
                     Log.e("TAG", "Search: $slider, $rating")
-                }
-            )
+                })
         },
         modifier = Modifier
             .fillMaxSize()
@@ -184,14 +167,15 @@ fun Search(navController: NavController) {
 
 @Preview
 @Composable
-fun SearchView() = BottomSheet(0f, 10f)
+fun SearchView() = Search(rememberNavController())
 
 @Composable
 fun BottomSheet(
     rating: Float,
     slider: Float,
     ratingValues: (Float) -> Unit = {},
-    sliderValues: (Float) -> Unit = {}
+    sliderValues: (Float) -> Unit = {},
+    state: Boolean
 ) {
 
     Column(
@@ -200,9 +184,10 @@ fun BottomSheet(
                 color = colorResource(id = R.color.card_bg),
                 shape = MaterialTheme.shapes.medium.copy(CornerSize(20.dp))
             )
-            .padding(20.dp)
-            .fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally
+            .padding(
+                20.dp,
+            )
+            .fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally
 
     ) {
         Divider(
@@ -220,16 +205,32 @@ fun BottomSheet(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Text(text = "Cafe", style = MaterialTheme.typography.body1)
-            Text(text = "Restaurants", style = MaterialTheme.typography.body1)
-            Text(text = "Fast food", style = MaterialTheme.typography.body1)
+            Text(
+                text = "Cafe",
+                style = MaterialTheme.typography.body1,
+                color = colorResource(id = R.color.text_color)
+            )
+            Text(
+                text = "Restaurants",
+                style = MaterialTheme.typography.body1,
+                color = colorResource(id = R.color.text_color)
+            )
+            Text(
+                text = "Fast food",
+                style = MaterialTheme.typography.body1,
+                color = colorResource(id = R.color.text_color)
+            )
         }
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Text(text = "1k  ", style = MaterialTheme.typography.subtitle1.copy(fontSize = 14.sp))
+            Text(
+                text = "1k  ",
+                style = MaterialTheme.typography.subtitle1.copy(fontSize = 14.sp),
+                color = colorResource(id = R.color.text_color)
+            )
             Slider(
                 modifier = Modifier.weight(1f),
                 value = slider,
@@ -241,28 +242,32 @@ fun BottomSheet(
                     activeTrackColor = MaterialTheme.colors.primaryVariant
                 )
             )
-            Text(text = "   10k", style = MaterialTheme.typography.subtitle1.copy(fontSize = 14.sp))
+            Text(
+                text = "   10k",
+                style = MaterialTheme.typography.subtitle1.copy(fontSize = 14.sp),
+                color = colorResource(id = R.color.text_color)
+            )
         }
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Text(text = "Rating", style = MaterialTheme.typography.subtitle1.copy(fontSize = 14.sp))
-            RatingBar(
-                value = rating,
-                config = RatingBarConfig()
-                    .activeColor(MaterialTheme.colors.primaryVariant)
-                    .inactiveBorderColor(MaterialTheme.colors.primaryVariant)
-                    .numStars(5)
+            Text(
+                text = "Rating",
+                style = MaterialTheme.typography.subtitle1.copy(fontSize = 14.sp),
+                color = colorResource(id = R.color.text_color)
+            )
+            RatingBar(value = rating,
+                config = RatingBarConfig().activeColor(MaterialTheme.colors.primaryVariant)
+                    .inactiveBorderColor(MaterialTheme.colors.primaryVariant).numStars(5)
                     .style(RatingBarStyle.HighLighted),
                 onValueChange = {
                     ratingValues(it)
                 },
                 onRatingChanged = {
                     Log.d("TAG", "onRatingChanged: $it")
-                }
-            )
+                })
         }
 
     }
